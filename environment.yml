@@ -1,0 +1,14 @@
+# Local development environment for P-Tutor at UC Davis.
+#   conda env create -f environment.yml
+#   conda activate ptutor
+#   cd v5-unity && python bottle_server.py
+# Python is pinned to the version student code will run under on the server;
+# change it here (and in requirements.txt / the Dockerfile) deliberately.
+name: ptutor
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -r v5-unity/requirements.txt

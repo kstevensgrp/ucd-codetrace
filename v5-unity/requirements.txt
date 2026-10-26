@@ -1,0 +1,3 @@
+# Runtime dependencies for the Python visualizer backend.
+# pg_logger.py / pg_encoder.py use only the standard library.
+bottle==0.13.4
