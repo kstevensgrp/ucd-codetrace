@@ -4,26 +4,13 @@
 
 // Implements shared sessions (a.k.a. Codechella)
 
-// VERY IMPORTANT to grab the value of togetherjsInUrl before loading
-// togetherjs-min.js, since loading that file deletes #togetherjs from URL
-// NB: kinda gross global
-//
-// if this is true, this means that you JOINED SOMEONE ELSE'S SESSION
-// rather than starting your own session
-var togetherjsInUrl = !!(window.location.hash.match(/togetherjs=/)); // turn into bool
-if (togetherjsInUrl) {
-  console.log("togetherjsInUrl!");
-} else {
-  // if you're *not* loading a URL with togetherjs in it (i.e., joining into
-  // an existing session), then do this hack at the VERY BEGINNING before
-  // loading togetherjs-min.js to prevent TogetherJS from annoyingly
-  // auto-starting when, say, you're in a shared session and reload
-  // your browser (which can lead to weird interactions with the help queue)
-  console.log("NOT togetherjsInUrl!");
-  (window as any).TogetherJSConfig_noAutoStart = true;
-}
-
-require('script-loader!./lib/togetherjs/togetherjs-min.js');
+// P-Tutor: shared sessions / live help chat (TogetherJS) are disabled.
+// The TogetherJS library is no longer loaded and OptFrontendSharedSessions
+// exits its constructor early (see disableSharedSessions below), so none of
+// the help-queue polling, chat UI, or hub traffic in this file runs. The
+// class is kept because visualize.ts, recorder.ts, csc108h.ts and
+// composingprograms.ts subclass it.
+var togetherjsInUrl = false;
 
 require('script-loader!./lib/moment.min.js'); // https://momentjs.com/
 declare var moment: any; // for TypeScript
@@ -31,7 +18,9 @@ declare var moment: any; // for TypeScript
 require('script-loader!./lib/mobile-detect.min.js'); // http://hgoebl.github.io/mobile-detect.js/ https://github.com/hgoebl/mobile-detect.js
 declare var MobileDetect: any; // for TypeScript
 
-export var TogetherJS = (window as any).TogetherJS;
+// P-Tutor: the library is not loaded, so export an inert stub. Every
+// `TogetherJS.running` check in this file and its subclasses is then false.
+export var TogetherJS = (window as any).TogetherJS || {running: false};
 
 
 import {supports_html5_storage} from './opt-frontend-common';
@@ -337,7 +326,7 @@ export class OptFrontendSharedSessions extends OptFrontend {
   updateOutputSignalFromRemote = false;
   wantsPublicHelp = false;
   iMadeAPublicHelpRequest = false; // subtly different than wantsPublicHelp (see usage)
-  disableSharedSessions = false;
+  disableSharedSessions = true; // P-Tutor: live chat / shared sessions are off
   isIdle = false;
   peopleIveKickedOut = []; // #savage
 
@@ -360,15 +349,20 @@ export class OptFrontendSharedSessions extends OptFrontend {
 
   constructor(params={}) {
     super(params);
-    this.initTogetherJS();
-    this.initABTest();
 
     this.Range = ace.require('ace/range').Range; // for Ace Range() objects
+
+    if (this.disableSharedSessions) {
+      return; // P-Tutor: early exit, no TogetherJS / help queue / A-B test init
+    }
+
+    this.initTogetherJS();
+    this.initABTest();
 
     this.pyInputAceEditor.getSession().on("change", (e) => {
       // unfortunately, Ace doesn't detect whether a change was caused
       // by a setValue call
-      if (TogetherJS.running && !this.isPlayingDemo) {
+      if (TogetherJS && TogetherJS.running && !this.isPlayingDemo) {
         TogetherJS.send({type: "codemirror-edit"});
       }
     });

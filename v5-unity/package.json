@@ -1,26 +1,24 @@
 {
-  "name": "v5-unity",
+  "name": "ucd-ptutor",
   "version": "1.0.0",
-  "description": "OPT v5",
-  "main": "bundle.js",
-  "repository": "https://github.com/pgbovine/OnlinePythonTutor",
-  "license": "BSD-3-Clause",
+  "description": "P-Tutor at UC Davis (fork of Python Tutor v5-unity)",
+  "private": true,
+  "repository": "https://github.com/kstevensgrp/ucd-ptutor",
+  "license": "MIT",
   "scripts": {
-    "start": "python bottle_server.py",
-    "py3start": "python3 bottle_server.py",
-    "webpack": "webpack --devtool sourcemap --progress --colors --watch",
-    "production-build": "rm -f build/* && webpack && python add_cache_busting_query_strings.py"
+    "start": "python3 bottle_server.py",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack",
+    "watch": "NODE_OPTIONS=--openssl-legacy-provider webpack --devtool sourcemap --progress --watch",
+    "production-build": "rm -f build/* && npm run build && python3 add_cache_busting_query_strings.py"
   },
-  "dependencies": {
-    "css-loader": "",
-    "fs-extra": "^6.0.1",
-    "json-stable-stringify": "^1.0.1",
-    "on-build-webpack": "^0.1.0",
-    "pixelmatch": "^4.0.2",
-    "puppeteer": "^1.5.0",
-    "script-loader": "",
-    "style-loader": "",
-    "ts-loader": "^3.5.0",
-    "url-loader": ""
+  "devDependencies": {
+    "css-loader": "0.28.11",
+    "script-loader": "0.7.2",
+    "style-loader": "0.21.0",
+    "ts-loader": "3.5.0",
+    "typescript": "2.9.2",
+    "url-loader": "1.1.2",
+    "file-loader": "1.1.11",
+    "webpack": "3.12.0"
   }
 }

@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var WebpackOnBuildPlugin = require('on-build-webpack');
 var exec = require('child_process').exec;
 
 module.exports = {
@@ -77,7 +76,11 @@ module.exports = {
         loaders: [
             { test: /\.css$/, loader: "style-loader!css-loader" }, // CSS
             { test: /\.(png|jpg)$/, loader: 'url-loader' }, // images
-            { test: /\.ts$/, loader: 'ts-loader' } // TypeScript
+            { test: /\.ts$/, loader: 'ts-loader',
+              // P-Tutor: upstream never committed its tsd `typings/` dir, so full
+              // type-checking reports hundreds of missing-declaration errors.
+              // transpileOnly skips type-checking; emitted JS is unchanged.
+              options: { transpileOnly: true } } // TypeScript
         ]
     },
 
