@@ -28945,6 +28945,10 @@ var OptTestcases = /** @class */ (function () {
         $("#testCasesParent")
             .empty() // just to be paranoid, empty this out (and its event handlers, too, supposedly)
             .html('<p style="margin-top: 10px;"><a href="#" id="createTestsLink">Create test cases</a></p><div id="testCasesPane"></div>');
+        // P-Tutor: the test-cases feature is kept but not advertised. The link
+        // is hidden; a page loaded with #testCasesJson=... still opens the pane
+        // (see visualize.ts), so saved permalinks with test cases keep working.
+        $("#testCasesParent #createTestsLink").hide();
         $("#testCasesParent #createTestsLink").click(function () {
             _this.initTestcasesPane();
             $("#testCasesParent #createTestsLink").hide();
