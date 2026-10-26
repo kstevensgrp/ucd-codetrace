@@ -622,29 +622,14 @@ export class OptLiveFrontend extends OptFrontend {
       assert(false);
     }
 
-    // submit update history of the "previous" visualizer whenever you
-    // run the code and hopefully get a new visualizer back
-    //
-    // don't bother if we're currently on a syntax error since the
-    // displayed visualization is no longer relevant
-    var prevUpdateHistoryJSON = undefined;
-    if (this.hasSyntaxError) {
-      prevUpdateHistoryJSON = 'hasSyntaxError'; // hacky
-    } else if (this.myVisualizer) {
-      var encodedUh = this.compressUpdateHistoryList();
-      prevUpdateHistoryJSON = JSON.stringify(encodedUh);
-    }
+    // P-Tutor: upstream sent the previous visualizer's step history here; removed.
 
     if (jsonp_endpoint) {
       assert (pyState !== '2' && pyState !== '3');
       // hack! should just be a dummy script for logging only
       $.get(backendScript,
             {user_script : codeToExec,
-             options_json: JSON.stringify(backendOptionsObj),
-             user_uuid: this.userUUID,
-             session_uuid: this.sessionUUID,
-             prevUpdateHistoryJSON: prevUpdateHistoryJSON,
-             exeTime: new Date().getTime()},
+             options_json: JSON.stringify(backendOptionsObj)},
              (dat) => {}, "text"); // NOP handler since it's a dummy
 
       // the REAL call uses JSONP
@@ -666,11 +651,7 @@ export class OptLiveFrontend extends OptFrontend {
         $.get(backendScript,
               {user_script : codeToExec,
                raw_input_json: this.rawInputLst.length > 0 ? JSON.stringify(this.rawInputLst) : '',
-               options_json: JSON.stringify(backendOptionsObj),
-               user_uuid: this.userUUID,
-               session_uuid: this.sessionUUID,
-               prevUpdateHistoryJSON: prevUpdateHistoryJSON,
-               exeTime: new Date().getTime()},
+               options_json: JSON.stringify(backendOptionsObj)},
                execCallback, "json");
       } else if (pyState === 'js') {
         if (window.location.href.indexOf('localhost') >= 0) {
@@ -679,11 +660,7 @@ export class OptLiveFrontend extends OptFrontend {
           $.get('http://localhost:3000/exec_js_native',
                 {user_script : codeToExec,
                  raw_input_json: this.rawInputLst.length > 0 ? JSON.stringify(this.rawInputLst) : '',
-                 options_json: JSON.stringify(backendOptionsObj),
-                 user_uuid: this.userUUID,
-                 session_uuid: this.sessionUUID,
-                 prevUpdateHistoryJSON: prevUpdateHistoryJSON,
-                 exeTime: new Date().getTime()},
+                 options_json: JSON.stringify(backendOptionsObj)},
                  execCallback, "json");
         } else {
           assert(false);

@@ -56,8 +56,6 @@ const CPP_BLANK_TEMPLATE = `int main() {
   return 0;
 }`;
 
-const CODE_SNAPSHOT_DEBOUNCE_MS = 1000;
-const SUBMIT_UPDATE_HISTORY_INTERVAL_MS = 1000 * 60;
 
 function sanitizeURL(s) {
   return s.replace(/\(/g, '%28').replace(/\)/g, '%29'); // replace ( with %28 and ) with %29 so that links embed well in Markdown and email clients
@@ -69,8 +67,8 @@ export class OptFrontend extends AbstractBaseFrontend {
   pyInputAceEditor = undefined; // Ace editor object that contains the user's code
 
   // some subclasses use these, so put them in the superclass
-  activateSyntaxErrorSurvey: boolean = true;
-  activateRuntimeErrorSurvey: boolean = true;
+  activateSyntaxErrorSurvey: boolean = false;  // P-Tutor: error-cause survey bubbles (posted to *_survey.py) are off
+  activateRuntimeErrorSurvey: boolean = false;
   activateEurekaSurvey: boolean = false; // P-Tutor: eureka survey removed (surveys.ts deleted)
 
   demoMode: boolean = false; // if true, then we're giving a live demo, so hide a bunch of excess stuff on page
@@ -172,77 +170,10 @@ export class OptFrontend extends AbstractBaseFrontend {
       });
     }
 
-    // when you leave or reload the page, submit an updateHistoryJSON if you
-    // have one. beforeunload seems to work better than unload(), but it's
-    // still a bit flaky ... TODO: investigate :(
-    $(window).on('beforeunload', () => {
-      this.submitUpdateHistory('beforeunload');
-      // don't return anything, or a modal dialog box might pop up
-    });
-
-    // just do this as well, even though it might be hella redundant
-    $(window).on('unload', () => {
-      this.submitUpdateHistory('unload');
-      // don't return anything, or a modal dialog box might pop up
-    });
-
-    // periodically do submitUpdateHistory() to handle the case when
-    // someone is simply idle on the page without reloading it or
-    // re-editing code; that way, we can still get some signals rather
-    // than nothing.
-    var lastSubmittedUpdateHistoryLength = 0;
-    setInterval(() => {
-      if (this.myVisualizer) {
-        var uh = this.myVisualizer.updateHistory;
-        // don't submit identical entries repeatedly since that's redundant
-        if (uh && (uh.length != lastSubmittedUpdateHistoryLength)) {
-          lastSubmittedUpdateHistoryLength = uh.length;
-          this.submitUpdateHistory('periodic');
-        }
-      }
-    }, SUBMIT_UPDATE_HISTORY_INTERVAL_MS);
+    // P-Tutor: upstream submitted the step-navigation history (viz_interaction.py)
+    // on unload, on edit, and every minute. Removed.
 
     this.parseQueryString(); // do this at the end after Ace editor initialized
-  }
-
-  // Compress updateHistory before encoding and sending to
-  // the server so that it takes up less room in the URL. Have each
-  // entry except for the first be a delta from the FIRST entry.
-  compressUpdateHistoryList() {
-    assert(this.myVisualizer);
-    var uh = this.myVisualizer.updateHistory;
-    var encodedUh = [];
-    if (uh) {
-      encodedUh.push(uh[0]);
-
-      var firstTs = uh[0][1];
-      for (var i = 1; i < uh.length; i++) {
-        var e = uh[i];
-        encodedUh.push([e[0], e[1] - firstTs]);
-      }
-
-      // finally push a final entry with the current timestamp delta
-      var curTs = new Date().getTime();
-      encodedUh.push([this.myVisualizer.curInstr, curTs - firstTs]);
-    }
-    return encodedUh;
-  }
-
-  // this feature was deployed on 2015-09-17, so check logs for
-  // viz_interaction.py
-  submitUpdateHistory(why) {
-    if (this.myVisualizer) {
-      var encodedUh = this.compressUpdateHistoryList();
-      var encodedUhJSON = JSON.stringify(encodedUh);
-
-      var myArgs: any = {session_uuid: this.sessionUUID,
-                         user_uuid: this.userUUID,
-                         updateHistoryJSON: encodedUhJSON};
-      if (why) {
-        myArgs.why = why;
-      }
-      $.get('viz_interaction.py', myArgs, (dat) => {});
-    }
   }
 
   initAceEditor(height: number) {
@@ -266,7 +197,6 @@ export class OptFrontend extends AbstractBaseFrontend {
     $('#codeInputPane').css('width', '700px');
     $('#codeInputPane').css('height', height + 'px'); // VERY IMPORTANT so that it works on I.E., ugh!
 
-    this.initDeltaObj();
     this.pyInputAceEditor.on('change', (e) => {
       // 2017-11-21: convert all tabs to 4 spaces so that when you paste
       // in code from somewhere else that contains tabs, instantly
@@ -278,8 +208,6 @@ export class OptFrontend extends AbstractBaseFrontend {
         this.pyInputSetValue(curVal.replace(allTabsRE, '    '));
         console.log("Converted all tabs to spaces");
       }
-
-      $.doTimeout('pyInputAceEditorChange', CODE_SNAPSHOT_DEBOUNCE_MS, this.snapshotCodeDiff.bind(this)); // debounce
 
       // starting on 2018-03-14 -- do NOT clear frontend errors and
       // annotations when you edit the code, since you may still want to
@@ -400,20 +328,12 @@ export class OptFrontend extends AbstractBaseFrontend {
     var frontendOptionsObj = this.getBaseFrontendOptionsObj();
     frontendOptionsObj.startingInstruction = forceStartingInstr;
 
-    this.snapshotCodeDiff(); // do ONE MORE snapshot before we execute, or else
-                             // we'll miss a diff if the user hits Visualize Execution
-                             // very shortly after finishing coding
-    if (this.deltaObj) {
-      this.deltaObj.executeTime = new Date().getTime();
-    }
-
     this.executeCodeAndCreateViz(this.pyInputGetValue(),
                                  $('#pythonVersionSelector').val(),
                                  backendOptionsObj,
                                  frontendOptionsObj,
                                  'pyOutputPane');
 
-    this.initDeltaObj(); // clear deltaObj to start counting over again
   }
 
   finishSuccessfulExecution() {
@@ -503,41 +423,11 @@ export class OptFrontend extends AbstractBaseFrontend {
   }
 
   ignoreAjaxError(settings) {
-    // other idiosyncratic errors to ignore
-    if ((settings.url.indexOf('syntax_err_survey.py') > -1) ||
-        (settings.url.indexOf('runtime_err_survey.py') > -1) ||
-        (settings.url.indexOf('eureka_survey.py') > -1) ||
-        (settings.url.indexOf('error_log.py') > -1) ||
-        (settings.url.indexOf('viz_interaction.py') > -1)) {
-      return true;
-    }
-    return false;
+    return false; // P-Tutor: no logging/survey endpoints left to ignore
   }
 
-  initDeltaObj() {
-    assert(this.pyInputAceEditor);
-    // v is the version number
-    //   1 (version 1 was released on 2014-11-05)
-    //   2 (version 2 was released on 2015-09-16, added a startTime field)
-    this.deltaObj = {start: this.pyInputGetValue(), deltas: [], v: 2,
-                     startTime: new Date().getTime()};
-  }
-
-  snapshotCodeDiff() {
-    assert(this.deltaObj);
-    var newCode = this.pyInputGetValue();
-    var timestamp = new Date().getTime();
-
-    if (this.curCode != newCode) {
-      var diff = this.dmp.diff_toDelta(this.dmp.diff_main(this.curCode, newCode));
-      //var patch = this.dmp.patch_toText(this.dmp.patch_make(this.curCode, newCode));
-      var delta = {t: timestamp, d: diff};
-      this.deltaObj.deltas.push(delta);
-
-      this.curCode = newCode;
-      this.logEditDelta(delta);
-    }
-  }
+  // P-Tutor: initDeltaObj()/snapshotCodeDiff() (per-keystroke diff capture) removed.
+  snapshotCodeDiff() { }
 
   logEditDelta(delta) {
     this.logEventCodeopticon({type: 'editCode', delta: delta});
@@ -568,8 +458,6 @@ export class OptFrontend extends AbstractBaseFrontend {
       // conceptual model but breaks the browser's expected Forward and
       // Back button flow
       $("#pyOutputPane").empty();
-      // right before destroying, submit the visualizer's updateHistory
-      this.submitUpdateHistory('editMode');
       this.myVisualizer = null; // yikes!
 
       $(document).scrollTop(0); // scroll to top to make UX better on small monitors

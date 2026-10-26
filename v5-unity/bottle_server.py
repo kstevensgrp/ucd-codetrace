@@ -20,13 +20,11 @@ import json
 import pg_logger
 
 
+# Non-Python languages first hit these as a logging-only dummy before the
+# real JSONP call to the cokapi backend. (P-Tutor: the telemetry routes
+# viz_interaction.py / error_log.py / *_survey.py are gone; nothing calls them.)
 @route('/web_exec_<name:re:.+>.py')
 @route('/LIVE_exec_<name:re:.+>.py')
-@route('/viz_interaction.py')
-@route('/syntax_err_survey.py')
-@route('/runtime_err_survey.py')
-@route('/eureka_survey.py')
-@route('/error_log.py')
 def dummy_ok(name=None):
     return 'OK'
 

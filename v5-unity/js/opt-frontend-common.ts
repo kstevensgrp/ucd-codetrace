@@ -12,11 +12,9 @@
 /// <reference path="_references.ts" />
 
 // for TypeScript
-declare var diff_match_patch: any;
 declare var codeopticonUsername: string; // FIX later when porting Codeopticon
 declare var codeopticonSession: string;  // FIX later when porting Codeopticon
 
-require('./lib/diff_match_patch.js');
 require('./lib/jquery.ba-dotimeout.min.js');
 
 // need to directly import the class for type checking to work
@@ -51,10 +49,8 @@ export abstract class AbstractBaseFrontend {
 
   isExecutingCode: boolean = false;
 
-  // optional: not all frontends keep track of deltas
-  dmp = new diff_match_patch();
-  curCode = ''; // for dmp snapshots, kinda kludgy
-  deltaObj : {start: string, deltas: any[], v: number, startTime: number, executeTime?: number} = undefined;
+  // P-Tutor: upstream kept a diff_match_patch log of every edit here
+  // (deltaObj / curCode / dmp) and sent it with each execution. Removed.
 
   num414Tries = 0;
 
@@ -126,21 +122,9 @@ export abstract class AbstractBaseFrontend {
   abstract handleUncaughtException(trace: any[]) : any; // called by executeCodeAndCreateViz
 
   constructor(params: any = {}) {
-    if (supports_html5_storage()) {
-      // generate a unique UUID per "user" (as indicated by a single browser
-      // instance on a user's machine, which can be more precise than IP
-      // addresses due to sharing of IP addresses within, say, a school
-      // computer lab)
-      // added on 2015-01-27 for more precise user identification
-      if (!localStorage.getItem('opt_uuid')) {
-        localStorage.setItem('opt_uuid', generateUUID());
-      }
-
-      this.userUUID = localStorage.getItem('opt_uuid');
-      assert(this.userUUID);
-    } else {
-      this.userUUID = undefined;
-    }
+    // P-Tutor: upstream generated a persistent per-browser UUID
+    // (localStorage 'opt_uuid') for usage research. We don't track users.
+    this.userUUID = undefined;
 
     // register a generic AJAX error handler
     $(document).ajaxError((evt, jqxhr, settings, exception) => {
@@ -207,25 +191,7 @@ export abstract class AbstractBaseFrontend {
     $("#frontendErrorOutput").html(lines.map(htmlspecialchars).join('<br/>') +
                                    (ignoreLog ? '' : '<p/>(' + unsupportedFeaturesStr + ')'));
 
-    // log it to the server as well (unless ignoreLog is on)
-    if (!ignoreLog) {
-      var errorStr = lines.join();
-
-      var myArgs = this.getAppState();
-      (myArgs as any).opt_uuid = this.userUUID;
-      (myArgs as any).session_uuid = this.sessionUUID;
-      (myArgs as any).error_msg = errorStr;
-
-      // very subtle! if you have a 414 error, that means your original
-      // code was too long to fit in the URL, so CLEAR THE FULL CODE from
-      // myArgs, or else it will generate a URL that will give a 414 again
-      // when you run error_log.py!!! this relies on this.num414Tries not
-      // being reset yet at this point:
-      if (this.num414Tries > 0) {
-        (myArgs as any).code = '#CodeTooLong: ' + String((myArgs as any).code.length) + ' bytes';
-      }
-      $.get('error_log.py', myArgs, function(dat) {}); // added this logging feature on 2018-02-18
-    }
+    // P-Tutor: upstream also POSTed the error + code to error_log.py; removed.
   }
 
   clearFrontendError() {
@@ -403,24 +369,8 @@ export abstract class AbstractBaseFrontend {
         frontendOptionsObj.disableHeapNesting = true; // never nest Java objects, seems like a good default
       }
 
-      // if we don't have any deltas, then don't bother sending deltaObj:
-      // NB: not all subclasses will initialize this.deltaObj
-      var deltaObjStringified = (this.deltaObj && (this.deltaObj.deltas.length > 0)) ? JSON.stringify(this.deltaObj) : null;
-      if (deltaObjStringified) {
-        // if deltaObjStringified is too long, then that will likely make
-        // the URL way too long. in that case, just make it null and don't
-        // send a delta (NB: actually set it to a canary value "overflow").
-        // we'll lose some info but at least the URL will hopefully not overflow:
-        if (deltaObjStringified.length > 4096) {
-          deltaObjStringified = "overflow"; // set a canary to overflow
-        }
-      } else {
-        // if we got here due to the num414Tries retries hack, set
-        // canary to "overflow"
-        if (this.num414Tries > 0) {
-          deltaObjStringified = "overflow_414";
-        }
-      }
+      // P-Tutor: upstream serialized per-keystroke edit deltas (deltaObj)
+      // into diffs_json here; keystroke capture is removed.
 
       // if we can find a matching cache entry, then use it!!!
       if (this.traceCache) {
@@ -468,10 +418,7 @@ export abstract class AbstractBaseFrontend {
         // only, and to check whether there's a 414 error for #CodeTooLong
         $.get(backendScript,
               {user_script : codeToExec,
-               options_json: JSON.stringify(backendOptionsObj),
-               user_uuid: this.userUUID,
-               session_uuid: this.sessionUUID,
-               diffs_json: deltaObjStringified},
+               options_json: JSON.stringify(backendOptionsObj)},
                (dat) => {
                 // this is super important! only if this first call is a
                 // SUCCESS do we actually make the REAL call using JSONP.
@@ -552,10 +499,7 @@ export abstract class AbstractBaseFrontend {
         $.get(backendScript,
               {user_script : codeToExec,
                raw_input_json: this.rawInputLst.length > 0 ? JSON.stringify(this.rawInputLst) : '',
-               options_json: JSON.stringify(backendOptionsObj),
-               user_uuid: this.userUUID,
-               session_uuid: this.sessionUUID,
-               diffs_json: deltaObjStringified},
+               options_json: JSON.stringify(backendOptionsObj)},
                callbackWrapper, "json");
       }
   }

@@ -1,14 +1,6 @@
 export var privacyAndEndingHTML = `
 
-<p style="margin-top: 30px;">Privacy Policy: By using Python Tutor, your
-visualized code, options, user interactions, text chats, and IP address
-are logged on our server and may be analyzed for research purposes.
-Nearly all web services collect this basic information from users in
-their server logs. However, Python Tutor does not collect any personally
-identifiable information from its users. It uses Google Analytics for
-website analytics.</p>
-
-<p>Terms of Service: The Python Tutor service is provided for free on an
+<p style="margin-top: 30px;">Terms of Service: The Python Tutor service is provided for free on an
 as-is basis. Use this service at your own risk. Do not use it to share
 confidential information. The developers of Python Tutor are not
 responsible for the chat messages or behaviors of any of the users on
