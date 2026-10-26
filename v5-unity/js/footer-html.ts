@@ -1,16 +1,16 @@
 export var privacyAndEndingHTML = `
 
-<p style="margin-top: 30px;">Terms of Service: The Python Tutor service is provided for free on an
-as-is basis. Use this service at your own risk. Do not use it to share
-confidential information. The developers of Python Tutor are not
-responsible for the chat messages or behaviors of any of the users on
-this website. We are also not responsible for any damages caused by
-using this website. Finally, it is your responsibility to follow
-appropriate academic integrity standards.</p>
+<p style="margin-top: 30px;"><b>About this site:</b> P-Tutor at UC Davis is a
+free tool for UC Davis courses. It's offered as is, so please don't paste
+anything private into it, and when you use it on assignments, follow your
+course's academic integrity policy. Enjoy exploring how your code runs!</p>
 
-<p style="margin-top: 25px;">
-Copyright &copy; <a href="http://www.pgbovine.net/">Philip Guo</a>.  All rights reserved.
-</p>`;
+<p style="margin-top: 25px;">P-Tutor is an independent fork of
+<a href="https://pythontutor.com">Python Tutor</a>, the open-source project
+created by <a href="http://www.pgbovine.net/">Philip Guo</a>, used under the
+<a href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/LICENSE.txt">MIT License</a>.
+Thank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026
+K. A. Stevens, UC Davis.</p>`;
 
 
 export var footerHtml = `
