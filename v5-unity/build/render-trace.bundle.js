@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 73);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22851,8 +22851,7 @@ exports.push([module.i, "/*\n\nOnline Python Tutor\nhttps://github.com/pgbovine/
 /* 69 */,
 /* 70 */,
 /* 71 */,
-/* 72 */,
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

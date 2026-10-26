@@ -23369,78 +23369,17 @@ var AbstractBaseFrontend = /** @class */ (function () {
         this.traceCache = [];
     };
     AbstractBaseFrontend.prototype.setSurveyHTML = function () {
-        // use ${this.userUUID} within the string ...
-        var survey_v14 = "\n    <p style=\"font-size: 9pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;\">\n\n    Help improve this tool by completing a <a style=\"font-size: 10pt; font-weight: bold;\" href=\"https://docs.google.com/forms/d/e/1FAIpQLSfQJP1ojlv8XzXAvHz0al-J_Hs3GQu4XeblxT8EzS8dIzuaYA/viewform?entry.956368502=" + this.userUUID + "\" target=\"_blank\">short user survey</a>\n    </p>";
-        $('#surveyPane').html(survey_v14);
+        // P-Tutor: upstream's "short user survey" (a Google Form keyed by
+        // userUUID) is gone. Kept as a no-op because every page entry point
+        // calls it; the #surveyPane div stays empty.
+        $('#surveyPane').empty();
     };
     return AbstractBaseFrontend;
 }()); // END class AbstractBaseFrontend
 exports.AbstractBaseFrontend = AbstractBaseFrontend;
 // removed donation link on 2019-03-26
 //    Keep this tool free by making a <a style="font-size: 10pt; font-weight: bold;" href="http://pgbovine.net/support.htm" target="_blank">small donation</a> (PayPal, Patreon, credit/debit card)
-/* For survey questions. Versions of survey wording:
-
-[see ../../v3/js/opt-frontend-common.js for older versions of survey wording - v1 to v7]
-
-v8: (deployed on 2016-06-20) - like v7 except emphasize the main usage survey more, and have the over-60 survey as auxiliary
-const survey_v8 = '\n\
-<p style="font-size: 10pt; margin-top: 10px; margin-bottom: 15px; line-height: 175%;">\n\
-<span>Support our research and keep this tool free by <a href="https://docs.google.com/forms/d/1-aKilu0PECHZVRSIXHv8vJpEuKUO9uG3MrH864uX56U/viewform" target="_blank">filling out this user survey</a>.</span>\n\
-<br/>\n\
-<span style="font-size: 9pt;">If you are <b>at least 60 years old</b>, please also fill out <a href="https://docs.google.com/forms/d/1lrXsE04ghfX9wNzTVwm1Wc6gQ5I-B4uw91ACrbDhJs8/viewform" target="_blank">our survey about learning programming</a>.</span>\n\
-</p>'
-
-v9: (deployed on 2016-08-14, taken down 2016-12-05) - only put up the "older adults" survey except generalize it to ALL ages, take down the OPT usage survey for now
-const survey_v9 = '\n\
-<p style="font-size: 10pt; margin-top: 10px; margin-bottom: 15px; line-height: 175%;">\n\
-<span>Support our research and keep this tool free by <a href="https://docs.google.com/forms/d/1lrXsE04ghfX9wNzTVwm1Wc6gQ5I-B4uw91ACrbDhJs8/viewform" target="_blank"><b>filling out this user survey</b></a>.</span>\n\
-</p>'
-
-v10: (deployed on 2016-12-05) - survey of how native languages affects learning programming
-     (taken down on 2017-07-28)
-[see survey_v10 variable above]
-
-    // use ${this.userUUID} within the string ...
-    var survey_v10 = '\n\
-    <p style="font-size: 11pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">\n\
-    <span><span style="color: #e93f34;">Support our research and keep this tool free</span> by filling out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSe48NsBZPvu1hrTBwc8-aSic7nPSxpsxFqpUxV5AN4LwnyJWg/viewform?entry.956368502=';
-    survey_v10 += this.userUUID;
-    survey_v10 += '" target="_blank">survey on how your native spoken language affects how you learn programming</a>.</span></p>';
-
-    $('#surveyPane').html(survey_v10);
-
-v11: labinthewild python debugging experiment (deployed on 2017-07-28, taken down on 2017-09-12)
-    var survey_v11 = `<p style="font-size: 10pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">
-                        <span>
-                          <span style="color: #e93f34;">Support our research and practice Python</span>
-                          by trying our new
-                          <a target="_blank" href="http://www.labinthewild.org/studies/python_tutor/">debugging skill test</a>!`;
-
-v12: simplified demographic survey which is a simplified hybrid of the v8 general usage survey and the v10 native language survey (deployed on 2017-09-12)
-
-    // use ${this.userUUID} within the string ...
-    var survey_v12 = '\n\
-    <p style="font-size: 10pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">\n\
-    <span>Support our research and keep this tool free by <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQJP1ojlv8XzXAvHz0al-J_Hs3GQu4XeblxT8EzS8dIzuaYA/viewform?entry.956368502=';
-    survey_v12 += this.userUUID;
-    survey_v12 += '" target="_blank"><b>filling out this short user survey</b></a>.</span></p>';
-
-v13: same as v12 except with slightly different wording, and adding a
-call for donations (deployed on 2017-12-27)
-
-    // use ${this.userUUID} within the string ...
-    var survey_v13 = '\n\
-    <p style="font-size: 10pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">\n\
-    <div style="margin-bottom: 12px;">Keep this tool free for everyone by <a href="http://pgbovine.net/support.htm" target="_blank"><b>making a small donation</b></a> <span style="font-size: 8pt;">(PayPal, Patreon, credit/debit card)</span></div>\
-    <span>Support our research by completing a <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQJP1ojlv8XzXAvHz0al-J_Hs3GQu4XeblxT8EzS8dIzuaYA/viewform?entry.956368502=';
-    survey_v13 += this.userUUID;
-    survey_v13 += '" target="_blank"><b>short user survey</b></a></span></p>';
-
-
-v14: very similar to v13 (deployed on 2018-03-11)
-[see the survey_v14 variable]
-
-*/
+// (P-Tutor: archive of upstream survey wordings v8-v14 removed; see git history.)
 // misc utilities:
 // From http://stackoverflow.com/a/8809472
 function generateUUID() {
@@ -25621,7 +25560,7 @@ var OptFrontend = /** @class */ (function (_super) {
         // some subclasses use these, so put them in the superclass
         _this.activateSyntaxErrorSurvey = true;
         _this.activateRuntimeErrorSurvey = true;
-        _this.activateEurekaSurvey = false; // taken down on 2019-10-19 because i really haven't looked at the data for a long time; see surveys.ts
+        _this.activateEurekaSurvey = false; // P-Tutor: eureka survey removed (surveys.ts deleted)
         _this.demoMode = false; // if true, then we're giving a live demo, so hide a bunch of excess stuff on page
         _this.preseededCurInstr = undefined;
         $('#genEmbedBtn').bind('click', function () {
@@ -28695,7 +28634,6 @@ var pytutor_1 = __webpack_require__(5);
 var opt_testcases_1 = __webpack_require__(65);
 var example_links_1 = __webpack_require__(68);
 var footer_html_1 = __webpack_require__(6);
-var surveys_1 = __webpack_require__(69);
 __webpack_require__(0);
 __webpack_require__(61);
 __webpack_require__(62);
@@ -28863,28 +28801,6 @@ var OptFrontendWithTestcases = /** @class */ (function (_super) {
         this.prevExecutionRuntimeErrorMsg = null; // clear this now and populate it in updateOutputCallbackFunc
         this.prevExecutionRuntimeErrorLine = null;
         this.prevExecutionRuntimeErrorCode = null;
-        // put eureka_survey below #codAndNav so that it's highly visible:
-        if (this.activateEurekaSurvey) {
-            this.myVisualizer.domRoot.find('#codAndNav').append(surveys_1.eureka_survey);
-            this.myVisualizer.domRoot.find('#codAndNav #eureka_survey').css('margin-top', '30px'); // leave some extra space
-            var that = this;
-            $('.surveyBtnBig').click(function (e) {
-                var myArgs = that.getAppState();
-                var buttonPrompt = $(this).html();
-                var res = prompt(surveys_1.eureka_prompt);
-                // don't do ajax call when Cancel button is pressed
-                // (note that if OK button is pressed with no response, then an
-                // empty string will still be sent to the server)
-                if (res !== null) {
-                    myArgs.surveyVersion = surveys_1.eureka_survey_version;
-                    myArgs.surveyQuestion = buttonPrompt;
-                    myArgs.surveyResponse = res;
-                    myArgs.opt_uuid = that.userUUID;
-                    myArgs.session_uuid = that.sessionUUID;
-                    $.get('eureka_survey.py', myArgs, function (dat) { });
-                }
-            });
-        }
     };
     // called whenever myVisualizer.updateOutput() is called to update the visualization;
     // set prevExecutionRuntimeErrorMsg / line / code if the user has stepped to a trace
@@ -29757,36 +29673,6 @@ exports.CPP_EXAMPLES = {
     cppPassRefLink: 'cpp-pass-by-ref.cpp',
     cppVirtualLink: 'cpp-virtual-method.cpp',
 };
-
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-// deployed on 2017-05-15:
-var eureka_survey_v1 = "\n  <div id=\"eureka_survey\" style=\"text-align: center; margin-top: 10px; margin-bottom: 15px;\">\n    <div style=\"margin-bottom: 6px;\">Support our research by clicking below whenever you learn something:</div>\n    <button class=\"surveyBtnBig\" type=\"button\">I just cleared up a misunderstanding!</button>\n    <button class=\"surveyBtnBig\" type=\"button\" style=\"margin-left: 12px;\">I just fixed a bug in my code!</button>\n  </div>\n";
-var eureka_prompt_v1 = "What was your misunderstanding or error? (Press 'OK' to submit)";
-// deployed on 2017-05-20:
-/*
-var eureka_survey_v2 = `
-  <div id="eureka_survey" style="text-align: center; margin-top: 10px; margin-bottom: 15px;">
-    <div style="margin-bottom: 6px;">Help us improve this tool by clicking below whenever you learn something:</div>
-    <button class="surveyBtnBig" type="button">I just cleared up a misunderstanding!</button>
-    <button class="surveyBtnBig" type="button" style="margin-left: 8px;">I just fixed a bug in my code!</button>
-  </div>
-`;
-*/
-// a SMALLER variant of eureka_survey_v2, deployed on 2018-03-15
-var eureka_survey_v2 = "\n  <div id=\"eureka_survey\" style=\"text-align: center; margin-top: 10px; margin-bottom: 15px;\">\n    <div style=\"margin-bottom: 6px;\">Help improve this tool by clicking whenever you learn something:</div>\n    <button class=\"smallBtn\" type=\"button\">I just cleared up a misunderstanding!</button>\n    <button class=\"smallBtn\" type=\"button\" style=\"margin-left: 8px;\">I just fixed a bug in my code!</button>\n  </div>\n";
-var eureka_prompt_v2 = "What was your misunderstanding or error? (Press 'OK' to submit)";
-// adjust as versions increase ...
-exports.eureka_survey_version = 'v2';
-exports.eureka_survey = eureka_survey_v2;
-exports.eureka_prompt = eureka_prompt_v2;
-// taken down on 2019-10-19 because i really haven't looked at the data for a long time
 
 
 /***/ })

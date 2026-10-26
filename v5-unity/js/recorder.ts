@@ -102,7 +102,6 @@ longer-term notes:
 import {OptFrontendSharedSessions,TogetherJS} from './opt-shared-sessions';
 import {assert} from './pytutor';
 import {footerHtml} from './footer-html';
-import {eureka_survey,eureka_prompt,eureka_survey_version} from './surveys';
 import {OptDemoVideo} from './demovideo';
 
 require('./lib/jquery-3.0.0.min.js');

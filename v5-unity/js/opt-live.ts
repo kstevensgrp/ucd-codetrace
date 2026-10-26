@@ -48,7 +48,6 @@ require('../css/opt-live.css');
 
 import {OptFrontend} from './opt-frontend';
 import {ExecutionVisualizer, assert, brightRed, darkArrowColor, lightArrowColor, SVG_ARROW_POLYGON, htmlspecialchars} from './pytutor';
-import {eureka_survey,eureka_prompt,eureka_survey_version} from './surveys';
 import {allTabsRE} from './opt-frontend';
 import {privacyAndEndingHTML,nullTraceErrorLst,unsupportedFeaturesStr} from './footer-html';
 

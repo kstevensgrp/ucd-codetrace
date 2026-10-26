@@ -71,7 +71,7 @@ export class OptFrontend extends AbstractBaseFrontend {
   // some subclasses use these, so put them in the superclass
   activateSyntaxErrorSurvey: boolean = true;
   activateRuntimeErrorSurvey: boolean = true;
-  activateEurekaSurvey: boolean = false; // taken down on 2019-10-19 because i really haven't looked at the data for a long time; see surveys.ts
+  activateEurekaSurvey: boolean = false; // P-Tutor: eureka survey removed (surveys.ts deleted)
 
   demoMode: boolean = false; // if true, then we're giving a live demo, so hide a bunch of excess stuff on page
   codcastFile: string; // name of a codcast demo file to try to load

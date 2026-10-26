@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 70);
+/******/ 	return __webpack_require__(__webpack_require__.s = 69);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -23369,78 +23369,17 @@ var AbstractBaseFrontend = /** @class */ (function () {
         this.traceCache = [];
     };
     AbstractBaseFrontend.prototype.setSurveyHTML = function () {
-        // use ${this.userUUID} within the string ...
-        var survey_v14 = "\n    <p style=\"font-size: 9pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;\">\n\n    Help improve this tool by completing a <a style=\"font-size: 10pt; font-weight: bold;\" href=\"https://docs.google.com/forms/d/e/1FAIpQLSfQJP1ojlv8XzXAvHz0al-J_Hs3GQu4XeblxT8EzS8dIzuaYA/viewform?entry.956368502=" + this.userUUID + "\" target=\"_blank\">short user survey</a>\n    </p>";
-        $('#surveyPane').html(survey_v14);
+        // P-Tutor: upstream's "short user survey" (a Google Form keyed by
+        // userUUID) is gone. Kept as a no-op because every page entry point
+        // calls it; the #surveyPane div stays empty.
+        $('#surveyPane').empty();
     };
     return AbstractBaseFrontend;
 }()); // END class AbstractBaseFrontend
 exports.AbstractBaseFrontend = AbstractBaseFrontend;
 // removed donation link on 2019-03-26
 //    Keep this tool free by making a <a style="font-size: 10pt; font-weight: bold;" href="http://pgbovine.net/support.htm" target="_blank">small donation</a> (PayPal, Patreon, credit/debit card)
-/* For survey questions. Versions of survey wording:
-
-[see ../../v3/js/opt-frontend-common.js for older versions of survey wording - v1 to v7]
-
-v8: (deployed on 2016-06-20) - like v7 except emphasize the main usage survey more, and have the over-60 survey as auxiliary
-const survey_v8 = '\n\
-<p style="font-size: 10pt; margin-top: 10px; margin-bottom: 15px; line-height: 175%;">\n\
-<span>Support our research and keep this tool free by <a href="https://docs.google.com/forms/d/1-aKilu0PECHZVRSIXHv8vJpEuKUO9uG3MrH864uX56U/viewform" target="_blank">filling out this user survey</a>.</span>\n\
-<br/>\n\
-<span style="font-size: 9pt;">If you are <b>at least 60 years old</b>, please also fill out <a href="https://docs.google.com/forms/d/1lrXsE04ghfX9wNzTVwm1Wc6gQ5I-B4uw91ACrbDhJs8/viewform" target="_blank">our survey about learning programming</a>.</span>\n\
-</p>'
-
-v9: (deployed on 2016-08-14, taken down 2016-12-05) - only put up the "older adults" survey except generalize it to ALL ages, take down the OPT usage survey for now
-const survey_v9 = '\n\
-<p style="font-size: 10pt; margin-top: 10px; margin-bottom: 15px; line-height: 175%;">\n\
-<span>Support our research and keep this tool free by <a href="https://docs.google.com/forms/d/1lrXsE04ghfX9wNzTVwm1Wc6gQ5I-B4uw91ACrbDhJs8/viewform" target="_blank"><b>filling out this user survey</b></a>.</span>\n\
-</p>'
-
-v10: (deployed on 2016-12-05) - survey of how native languages affects learning programming
-     (taken down on 2017-07-28)
-[see survey_v10 variable above]
-
-    // use ${this.userUUID} within the string ...
-    var survey_v10 = '\n\
-    <p style="font-size: 11pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">\n\
-    <span><span style="color: #e93f34;">Support our research and keep this tool free</span> by filling out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSe48NsBZPvu1hrTBwc8-aSic7nPSxpsxFqpUxV5AN4LwnyJWg/viewform?entry.956368502=';
-    survey_v10 += this.userUUID;
-    survey_v10 += '" target="_blank">survey on how your native spoken language affects how you learn programming</a>.</span></p>';
-
-    $('#surveyPane').html(survey_v10);
-
-v11: labinthewild python debugging experiment (deployed on 2017-07-28, taken down on 2017-09-12)
-    var survey_v11 = `<p style="font-size: 10pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">
-                        <span>
-                          <span style="color: #e93f34;">Support our research and practice Python</span>
-                          by trying our new
-                          <a target="_blank" href="http://www.labinthewild.org/studies/python_tutor/">debugging skill test</a>!`;
-
-v12: simplified demographic survey which is a simplified hybrid of the v8 general usage survey and the v10 native language survey (deployed on 2017-09-12)
-
-    // use ${this.userUUID} within the string ...
-    var survey_v12 = '\n\
-    <p style="font-size: 10pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">\n\
-    <span>Support our research and keep this tool free by <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQJP1ojlv8XzXAvHz0al-J_Hs3GQu4XeblxT8EzS8dIzuaYA/viewform?entry.956368502=';
-    survey_v12 += this.userUUID;
-    survey_v12 += '" target="_blank"><b>filling out this short user survey</b></a>.</span></p>';
-
-v13: same as v12 except with slightly different wording, and adding a
-call for donations (deployed on 2017-12-27)
-
-    // use ${this.userUUID} within the string ...
-    var survey_v13 = '\n\
-    <p style="font-size: 10pt; margin-top: 12px; margin-bottom: 15px; line-height: 150%;">\n\
-    <div style="margin-bottom: 12px;">Keep this tool free for everyone by <a href="http://pgbovine.net/support.htm" target="_blank"><b>making a small donation</b></a> <span style="font-size: 8pt;">(PayPal, Patreon, credit/debit card)</span></div>\
-    <span>Support our research by completing a <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQJP1ojlv8XzXAvHz0al-J_Hs3GQu4XeblxT8EzS8dIzuaYA/viewform?entry.956368502=';
-    survey_v13 += this.userUUID;
-    survey_v13 += '" target="_blank"><b>short user survey</b></a></span></p>';
-
-
-v14: very similar to v13 (deployed on 2018-03-11)
-[see the survey_v14 variable]
-
-*/
+// (P-Tutor: archive of upstream survey wordings v8-v14 removed; see git history.)
 // misc utilities:
 // From http://stackoverflow.com/a/8809472
 function generateUUID() {
@@ -25621,7 +25560,7 @@ var OptFrontend = /** @class */ (function (_super) {
         // some subclasses use these, so put them in the superclass
         _this.activateSyntaxErrorSurvey = true;
         _this.activateRuntimeErrorSurvey = true;
-        _this.activateEurekaSurvey = false; // taken down on 2019-10-19 because i really haven't looked at the data for a long time; see surveys.ts
+        _this.activateEurekaSurvey = false; // P-Tutor: eureka survey removed (surveys.ts deleted)
         _this.demoMode = false; // if true, then we're giving a live demo, so hide a bunch of excess stuff on page
         _this.preseededCurInstr = undefined;
         $('#genEmbedBtn').bind('click', function () {
@@ -28676,8 +28615,7 @@ exports.push([module.i, "/*! qTip2 - Pretty powerful tooltips - v2.0.0 - 2012-12
 /* 66 */,
 /* 67 */,
 /* 68 */,
-/* 69 */,
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28798,7 +28736,7 @@ __webpack_require__(0);
 __webpack_require__(61);
 __webpack_require__(62);
 // using this library to record audio to mp3: https://github.com/Audior/Recordmp3js
-__webpack_require__(71);
+__webpack_require__(70);
 // lifted from Recordmp3js
 function encode64(buffer) {
     var binary = '', bytes = new Uint8Array(buffer), len = bytes.byteLength;
@@ -29029,13 +28967,13 @@ $(document).ready(function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1)(__webpack_require__(72))
+__webpack_require__(1)(__webpack_require__(71))
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports) {
 
 module.exports = "// from https://github.com/Audior/Recordmp3js\n// all files in recordmp3js/ are also adapted from this projec\n(function(window){\n\n  var WORKER_PATH = 'js/lib/recordmp3js/recorderWorker.js';\n  var encoderWorker = new Worker('js/lib/recordmp3js/mp3Worker.js');\n\n  var Recorder = function(source, cfg){\n    var config = cfg || {};\n    var bufferLen = config.bufferLen || 4096;\n    var numChannels = config.numChannels || 2;\n    this.context = source.context;\n    this.node = (this.context.createScriptProcessor ||\n                 this.context.createJavaScriptNode).call(this.context,\n                 bufferLen, numChannels, numChannels);\n    var worker = new Worker(config.workerPath || WORKER_PATH);\n    worker.postMessage({\n      command: 'init',\n      config: {\n        sampleRate: this.context.sampleRate,\n        numChannels: numChannels\n      }\n    });\n    var recording = false,\n      currCallback;\n\n    this.node.onaudioprocess = function(e){\n      if (!recording) return;\n      var buffer = [];\n      for (var channel = 0; channel < numChannels; channel++){\n          buffer.push(e.inputBuffer.getChannelData(channel));\n      }\n      worker.postMessage({\n        command: 'record',\n        buffer: buffer\n      });\n    }\n\n    this.configure = function(cfg){\n      for (var prop in cfg){\n        if (cfg.hasOwnProperty(prop)){\n          config[prop] = cfg[prop];\n        }\n      }\n    }\n\n    this.record = function(){\n      recording = true;\n    }\n\n    this.stop = function(){\n      recording = false;\n    }\n\n    this.clear = function(){\n      worker.postMessage({ command: 'clear' });\n    }\n\n    this.getBuffer = function(cb) {\n      currCallback = cb || config.callback;\n      worker.postMessage({ command: 'getBuffer' })\n    }\n\n    this.exportWAV = function(cb, type){\n      currCallback = cb || config.callback;\n      type = type || config.type || 'audio/wav';\n      if (!currCallback) throw new Error('Callback not set');\n      worker.postMessage({\n        command: 'exportWAV',\n        type: type\n      });\n    }\n\n\t//Mp3 conversion\n    worker.onmessage = function(e){\n      var blob = e.data;\n\t  //console.log(\"the blob \" +  blob + \" \" + blob.size + \" \" + blob.type);\n\n\t  var arrayBuffer;\n\t  var fileReader = new FileReader();\n\n\t  fileReader.onload = function(){\n\t\tarrayBuffer = this.result;\n\t\tvar buffer = new Uint8Array(arrayBuffer),\n        data = parseWav(buffer);\n\n        console.log(data);\n\t\tconsole.log(\"Converting to Mp3\");\n\t\t//log.innerHTML += \"\\n\" + \"Converting to Mp3\";\n\n        encoderWorker.postMessage({ cmd: 'init', config:{\n            mode : 3,\n\t\t\tchannels:1,\n\t\t\tsamplerate: data.sampleRate,\n\t\t\tbitrate: data.bitsPerSample\n        }});\n\n        encoderWorker.postMessage({ cmd: 'encode', buf: Uint8ArrayToFloat32Array(data.samples) });\n        encoderWorker.postMessage({ cmd: 'finish'});\n        encoderWorker.onmessage = function(e) {\n            if (e.data.cmd == 'data') {\n              config.doneEncodingMp3Callback(e.data.buf); // pgbovine - should be set when Recorder was constructed\n            }\n        };\n\t  };\n\n\t  fileReader.readAsArrayBuffer(blob);\n\n      currCallback(blob);\n    }\n\n\n\tfunction encode64(buffer) {\n\t\tvar binary = '',\n\t\t\tbytes = new Uint8Array( buffer ),\n\t\t\tlen = bytes.byteLength;\n\n\t\tfor (var i = 0; i < len; i++) {\n\t\t\tbinary += String.fromCharCode( bytes[ i ] );\n\t\t}\n\t\treturn window.btoa( binary );\n\t}\n\n\tfunction parseWav(wav) {\n\t\tfunction readInt(i, bytes) {\n\t\t\tvar ret = 0,\n\t\t\t\tshft = 0;\n\n\t\t\twhile (bytes) {\n\t\t\t\tret += wav[i] << shft;\n\t\t\t\tshft += 8;\n\t\t\t\ti++;\n\t\t\t\tbytes--;\n\t\t\t}\n\t\t\treturn ret;\n\t\t}\n\t\tif (readInt(20, 2) != 1) throw 'Invalid compression code, not PCM';\n\t\tif (readInt(22, 2) != 1) throw 'Invalid number of channels, not 1';\n\t\treturn {\n\t\t\tsampleRate: readInt(24, 4),\n\t\t\tbitsPerSample: readInt(34, 2),\n\t\t\tsamples: wav.subarray(44)\n\t\t};\n\t}\n\n\tfunction Uint8ArrayToFloat32Array(u8a){\n\t\tvar f32Buffer = new Float32Array(u8a.length);\n\t\tfor (var i = 0; i < u8a.length; i++) {\n\t\t\tvar value = u8a[i<<1] + (u8a[(i<<1)+1]<<8);\n\t\t\tif (value >= 0x8000) value |= ~0x7FFF;\n\t\t\tf32Buffer[i] = value / 0x8000;\n\t\t}\n\t\treturn f32Buffer;\n\t}\n\n\tfunction uploadAudio(mp3Data){\n\t\tvar reader = new FileReader();\n\t\treader.onload = function(event){\n\t\t\tvar fd = new FormData();\n\t\t\tvar mp3Name = encodeURIComponent('audio_recording_' + new Date().getTime() + '.mp3');\n\t\t\tconsole.log(\"mp3name = \" + mp3Name);\n\t\t\tfd.append('fname', mp3Name);\n\t\t\tfd.append('data', event.target.result);\n\t\t\t$.ajax({\n\t\t\t\ttype: 'POST',\n\t\t\t\turl: 'upload.php',\n\t\t\t\tdata: fd,\n\t\t\t\tprocessData: false,\n\t\t\t\tcontentType: false\n\t\t\t}).done(function(data) {\n\t\t\t\t//console.log(data);\n\t\t\t\t//log.innerHTML += \"\\n\" + data;\n\t\t\t});\n\t\t};\n\t\treader.readAsDataURL(mp3Data);\n\t}\n\n    source.connect(this.node);\n    this.node.connect(this.context.destination);    //this should not be necessary\n  };\n\n  /*Recorder.forceDownload = function(blob, filename){\n\tconsole.log(\"Force download\");\n    var url = (window.URL || window.webkitURL).createObjectURL(blob);\n    var link = window.document.createElement('a');\n    link.href = url;\n    link.download = filename || 'output.wav';\n    var click = document.createEvent(\"Event\");\n    click.initEvent(\"click\", true, true);\n    link.dispatchEvent(click);\n  }*/\n\n  window.Recorder = Recorder;\n\n})(window);\n"
