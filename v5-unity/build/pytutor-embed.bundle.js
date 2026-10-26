@@ -585,6 +585,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 */
 __webpack_require__(10);
 __webpack_require__(0);
+// P-Tutor: the real interpreter version, fetched from the server by
+// AbstractBaseFrontend (opt-frontend-common.ts). Shown in #langDisplayDiv.
+exports.pythonVersionString = '3';
+function setPythonVersionString(v) { exports.pythonVersionString = v; }
+exports.setPythonVersionString = setPythonVersionString;
 __webpack_require__(11); // DO NOT UPGRADE ABOVE 1.3.10 OR ELSE BREAKAGE WILL OCCUR 
 __webpack_require__(12);
 __webpack_require__(13);
@@ -930,7 +935,7 @@ var ExecutionVisualizer = /** @class */ (function () {
             }
             // add an extra label to link back to the main site, so that viewers
             // on the embedded page know that they're seeing an OPT visualization
-            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;"><a href="http://pythontutor.com/" target="_blank" style="color: #3D58A2;">Python Tutor</a> by <a href="http://pgbovine.net/" target="_blank" style="color: #3D58A2;">Philip Guo</a></div>');
+            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #3D58A2;">P-Tutor</a></div>');
             base.find('#codeFooterDocs').hide(); // cut out extraneous docs
         }
         else {
@@ -3860,7 +3865,7 @@ var CodeDisplay = /** @class */ (function () {
                 this.domRoot.find('#langDisplayDiv').html('Python 2.7');
             }
             else if (lang === 'py3') {
-                this.domRoot.find('#langDisplayDiv').html('Python 3.6');
+                this.domRoot.find('#langDisplayDiv').html('Python ' + exports.pythonVersionString);
             }
             else if (lang === 'py3anaconda') {
                 this.domRoot.find('#langDisplayDiv').html('Python 3.6 with <a target="_blank" href="https://docs.anaconda.com/anaconda/">Anaconda 5.2</a> <font color="#e93f34">EXPERIMENTAL!</font><br/>(much slower than <a target="_blank" href="visualize.html#py=3">regular Python 3.6</a>, but lets you import more modules)');
@@ -22893,7 +22898,7 @@ function addVisualizerToPage(trace, divId, params) {
         params.embeddedMode = true;
     }
     if (params.editCodeBaseURL === undefined) {
-        params.editCodeBaseURL = 'http://pythontutor.com/visualize.html';
+        params.editCodeBaseURL = window.location.origin + '/visualize.html'; // P-Tutor
     }
     // When some div in your webpage (such as a visualizer div) expands in height,
     // it will "push down" all divs below it, but the SVG arrows rendered by

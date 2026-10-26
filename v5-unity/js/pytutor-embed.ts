@@ -27,7 +27,7 @@ function addVisualizerToPage(trace, divId, params) {
     params.embeddedMode = true;
   }
   if (params.editCodeBaseURL === undefined) {
-    params.editCodeBaseURL = 'http://pythontutor.com/visualize.html';
+    params.editCodeBaseURL = window.location.origin + '/visualize.html'; // P-Tutor
   }
 
   // When some div in your webpage (such as a visualizer div) expands in height,

@@ -28,6 +28,14 @@ import pg_logger
 def dummy_ok(name=None):
     return 'OK'
 
+# P-Tutor: the frontend labels the UI with the interpreter actually running
+@route('/python_version.txt')
+def python_version():
+    import platform
+    from bottle import response
+    response.content_type = 'text/plain'
+    return '.'.join(platform.python_version_tuple()[:2])  # e.g. '3.12'
+
 @route('/<filepath:path>')
 def index(filepath):
     return static_file(filepath, root='.')

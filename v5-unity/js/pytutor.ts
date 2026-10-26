@@ -32,6 +32,11 @@
 
 require('./lib/d3.v2.min.js');
 require('./lib/jquery-3.0.0.min.js');
+
+// P-Tutor: the real interpreter version, fetched from the server by
+// AbstractBaseFrontend (opt-frontend-common.ts). Shown in #langDisplayDiv.
+export var pythonVersionString = '3';
+export function setPythonVersionString(v: string) { pythonVersionString = v; }
 require('./lib/jquery.jsPlumb-1.3.10-all-min.js'); // DO NOT UPGRADE ABOVE 1.3.10 OR ELSE BREAKAGE WILL OCCUR 
 require('./lib/jquery-ui-1.11.4/jquery-ui.js');
 require('./lib/jquery-ui-1.11.4/jquery-ui.css');
@@ -470,7 +475,7 @@ export class ExecutionVisualizer {
 
       // add an extra label to link back to the main site, so that viewers
       // on the embedded page know that they're seeing an OPT visualization
-      base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;"><a href="http://pythontutor.com/" target="_blank" style="color: #3D58A2;">Python Tutor</a> by <a href="http://pgbovine.net/" target="_blank" style="color: #3D58A2;">Philip Guo</a></div>');
+      base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #3D58A2;">P-Tutor</a></div>');
       base.find('#codeFooterDocs').hide(); // cut out extraneous docs
     } else {
     }
@@ -3871,7 +3876,7 @@ class CodeDisplay {
       } else if (lang === 'py2') {
         this.domRoot.find('#langDisplayDiv').html('Python 2.7');
       } else if (lang === 'py3') {
-        this.domRoot.find('#langDisplayDiv').html('Python 3.6');
+        this.domRoot.find('#langDisplayDiv').html('Python ' + pythonVersionString);
       } else if (lang === 'py3anaconda') {
         this.domRoot.find('#langDisplayDiv').html('Python 3.6 with <a target="_blank" href="https://docs.anaconda.com/anaconda/">Anaconda 5.2</a> <font color="#e93f34">EXPERIMENTAL!</font><br/>(much slower than <a target="_blank" href="visualize.html#py=3">regular Python 3.6</a>, but lets you import more modules)');
       } else if (lang === 'c') {

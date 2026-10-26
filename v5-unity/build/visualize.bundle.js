@@ -617,6 +617,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 */
 __webpack_require__(10);
 __webpack_require__(0);
+// P-Tutor: the real interpreter version, fetched from the server by
+// AbstractBaseFrontend (opt-frontend-common.ts). Shown in #langDisplayDiv.
+exports.pythonVersionString = '3';
+function setPythonVersionString(v) { exports.pythonVersionString = v; }
+exports.setPythonVersionString = setPythonVersionString;
 __webpack_require__(11); // DO NOT UPGRADE ABOVE 1.3.10 OR ELSE BREAKAGE WILL OCCUR 
 __webpack_require__(12);
 __webpack_require__(13);
@@ -962,7 +967,7 @@ var ExecutionVisualizer = /** @class */ (function () {
             }
             // add an extra label to link back to the main site, so that viewers
             // on the embedded page know that they're seeing an OPT visualization
-            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;"><a href="http://pythontutor.com/" target="_blank" style="color: #3D58A2;">Python Tutor</a> by <a href="http://pgbovine.net/" target="_blank" style="color: #3D58A2;">Philip Guo</a></div>');
+            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #3D58A2;">P-Tutor</a></div>');
             base.find('#codeFooterDocs').hide(); // cut out extraneous docs
         }
         else {
@@ -3892,7 +3897,7 @@ var CodeDisplay = /** @class */ (function () {
                 this.domRoot.find('#langDisplayDiv').html('Python 2.7');
             }
             else if (lang === 'py3') {
-                this.domRoot.find('#langDisplayDiv').html('Python 3.6');
+                this.domRoot.find('#langDisplayDiv').html('Python ' + exports.pythonVersionString);
             }
             else if (lang === 'py3anaconda') {
                 this.domRoot.find('#langDisplayDiv').html('Python 3.6 with <a target="_blank" href="https://docs.anaconda.com/anaconda/">Anaconda 5.2</a> <font color="#e93f34">EXPERIMENTAL!</font><br/>(much slower than <a target="_blank" href="visualize.html#py=3">regular Python 3.6</a>, but lets you import more modules)');
@@ -22896,47 +22901,24 @@ var AbstractBaseFrontend = /** @class */ (function () {
             //  permissions)
             '2': 'web_exec_py2.py',
             '3': 'web_exec_py3.py',
-            // empty dummy scripts just to do logging on Apache server
-            'js': 'web_exec_js.py',
-            'ts': 'web_exec_ts.py',
-            'java': 'web_exec_java.py',
-            'ruby': 'web_exec_ruby.py',
-            'c': 'web_exec_c.py',
-            'cpp': 'web_exec_cpp.py',
-            // experimental!
-            'py3anaconda': 'web_exec_py3anaconda.py',
         };
-        // these settings are all customized for my own server setup,
-        // so you will need to customize for your server:
-        this.serverRoot = (window.location.protocol === 'https:') ?
-            'https://cokapi.com/' : // my certificate for https is registered via cokapi.com, so use it for now
-            'http://cokapi.com/'; // try cokapi.com so that hopefully it works through firewalls better than directly using its IP addr (which should be 104.237.139.253)
-        // (but that's just an unsubstantiated hunch)
-        // randomly pick one backup server to load balance:
-        this.backupHttpServerRoot = (Math.random() >= 0.5) ? 'http://45.33.41.179/' : 'http://23.239.12.25/';
-        // see ../../v4-cokapi/cokapi.js for details
+        // P-Tutor: upstream also mapped js/ts/java/ruby/c/cpp/py3anaconda to JSONP
+        // endpoints on cokapi.com (plus two raw-IP backup servers). Only Python
+        // runs here, on this server, so those are gone. opt-live.ts still reads
+        // this map, hence the nulls.
         this.langSettingToJsonpEndpoint = {
             '2': null,
             '3': null,
-            'js': this.serverRoot + 'exec_js_jsonp',
-            'ts': this.serverRoot + 'exec_ts_jsonp',
-            'java': this.serverRoot + 'exec_java_jsonp',
-            'ruby': this.serverRoot + 'exec_ruby_jsonp',
-            'c': this.serverRoot + 'exec_c_jsonp',
-            'cpp': this.serverRoot + 'exec_cpp_jsonp',
-            'py3anaconda': this.serverRoot + 'exec_pyanaconda_jsonp',
         };
-        this.langSettingToJsonpEndpointBackup = {
-            '2': null,
-            '3': null,
-            'js': this.backupHttpServerRoot + 'exec_js_jsonp',
-            'ts': this.backupHttpServerRoot + 'exec_ts_jsonp',
-            'java': this.backupHttpServerRoot + 'exec_java_jsonp',
-            'ruby': this.backupHttpServerRoot + 'exec_ruby_jsonp',
-            'c': this.backupHttpServerRoot + 'exec_c_jsonp',
-            'cpp': this.backupHttpServerRoot + 'exec_cpp_jsonp',
-            'py3anaconda': this.backupHttpServerRoot + 'exec_pyanaconda_jsonp',
-        };
+        // P-Tutor: ask the server which Python it runs and label the UI with it,
+        // instead of upstream's hard-coded "Python 3.6".
+        $.get('python_version.txt', function (v) {
+            v = String(v).trim();
+            if (/^\d+\.\d+/.test(v)) {
+                pytutor_1.setPythonVersionString(v);
+                $('#pythonVersionSelector option[value="3"]').text('Python ' + v);
+            }
+        }, 'text');
         // P-Tutor: upstream generated a persistent per-browser UUID
         // (localStorage 'opt_uuid') for usage research. We don't track users.
         this.userUUID = undefined;
@@ -23135,7 +23117,6 @@ var AbstractBaseFrontend = /** @class */ (function () {
         };
         var backendScript = this.langSettingToBackendScript[pyState];
         pytutor_1.assert(backendScript);
-        var jsonp_endpoint = this.langSettingToJsonpEndpoint[pyState]; // maybe null
         if (!backendScript) {
             this.setFronendError(["Server configuration error: No backend script"]);
             return;
@@ -23167,103 +23148,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
             }
         }
         // everything below here is an ajax (async) call to the server ...
-        if (jsonp_endpoint) {
-            pytutor_1.assert(pyState !== '2' && pyState !== '3');
-            // 2018-08-19: this is an uncommon use case (only used for https iframe embedding)
-            if (jsonp_endpoint.indexOf('https:') == 0) {
-                this.setFronendError(["Error: https execution of non-Python code is not currently supported. [#nonPythonHttps]"]);
-                this.doneExecutingCode();
-                return;
-            }
-            var retryOnBackupServer = function () {
-                // first log a #TryBackup error entry:
-                _this.setFronendError(["Main server is busy or has errors; re-trying using backup server " + _this.backupHttpServerRoot + " ... [#TryBackup]"]);
-                // now re-try the query using the backup server:
-                var backup_jsonp_endpoint = _this.langSettingToJsonpEndpointBackup[pyState];
-                pytutor_1.assert(backup_jsonp_endpoint);
-                $.ajax({
-                    url: backup_jsonp_endpoint,
-                    // The name of the callback parameter, as specified by the YQL service
-                    jsonp: "callback",
-                    dataType: "jsonp",
-                    data: { user_script: codeToExec,
-                        options_json: JSON.stringify(backendOptionsObj),
-                        raw_input_json: _this.rawInputLst.length > 0 ? JSON.stringify(_this.rawInputLst) : null,
-                    },
-                    success: callbackWrapper
-                });
-            };
-            // for non-python, this should be a dummy script for logging
-            // only, and to check whether there's a 414 error for #CodeTooLong
-            $.get(backendScript, { user_script: codeToExec,
-                options_json: JSON.stringify(backendOptionsObj) }, function (dat) {
-                // this is super important! only if this first call is a
-                // SUCCESS do we actually make the REAL call using JSONP.
-                // the reason why is that we might get a 414 error for
-                // #CodeTooLong if we try to execute this code, in which
-                // case we want to either re-try or bail out. this also
-                // keeps the control flow synchronous. we always try
-                // the original backendScript, and then we try
-                // jsonp_endpoint only if that's successful:
-                // the REAL call uses JSONP
-                // http://learn.jquery.com/ajax/working-with-jsonp/
-                $.ajax({
-                    url: jsonp_endpoint,
-                    // for testing
-                    //url: 'http://cokapi.com/test_failure_jsonp',
-                    //url: 'http://cokapi.com/unknown_url',
-                    // The name of the callback parameter, as specified by the YQL service
-                    jsonp: "callback",
-                    dataType: "jsonp",
-                    data: { user_script: codeToExec,
-                        options_json: JSON.stringify(backendOptionsObj),
-                        raw_input_json: _this.rawInputLst.length > 0 ? JSON.stringify(_this.rawInputLst) : null,
-                    },
-                    success: function (dataFromBackend) {
-                        var trace = dataFromBackend.trace;
-                        var shouldRetry = false;
-                        // the cokapi backend responded successfully, but the
-                        // backend may have issued an error. if so, then
-                        // RETRY with backupHttpServerRoot. otherwise let it
-                        // through to callbackWrapper
-                        if (!trace ||
-                            (trace.length == 0) ||
-                            (trace[trace.length - 1].event == 'uncaught_exception')) {
-                            if (trace.length == 1) {
-                                // we should only retry if there's a legit
-                                // backend error and not just a syntax error:
-                                var msg = trace[0].exception_msg;
-                                if (msg.indexOf('#BackendError') >= 0) {
-                                    shouldRetry = true;
-                                }
-                            }
-                            else {
-                                shouldRetry = true;
-                            }
-                        }
-                        // don't bother re-trying for https since we don't
-                        // currently have an https backup server
-                        if (window.location.protocol === 'https:') {
-                            shouldRetry = false;
-                        }
-                        if (shouldRetry) {
-                            retryOnBackupServer();
-                        }
-                        else {
-                            // accept our fate without retrying
-                            callbackWrapper(dataFromBackend);
-                        }
-                    },
-                    // if there's a server error, then ALWAYS retry:
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        retryOnBackupServer();
-                        // use 'global: false;' below to NOT run the generic ajaxError() function
-                    },
-                    global: false,
-                });
-            }, "text");
-        }
-        else {
+        {
             // for Python 2 or 3, directly execute backendScript
             pytutor_1.assert(pyState === '2' || pyState === '3');
             $.get(backendScript, { user_script: codeToExec,
@@ -25459,7 +25344,7 @@ var OptFrontend = /** @class */ (function (_super) {
             delete myArgs.mode;
             myArgs.codeDivWidth = pytutor_1.ExecutionVisualizer.DEFAULT_EMBEDDED_CODE_DIV_WIDTH;
             myArgs.codeDivHeight = pytutor_1.ExecutionVisualizer.DEFAULT_EMBEDDED_CODE_DIV_HEIGHT;
-            var domain = "http://pythontutor.com/"; // for deployment
+            var domain = window.location.origin + "/"; // P-Tutor: whatever host serves this page
             var embedUrlStr = $.param.fragment(domain + "iframe-embed.html", myArgs, 2 /* clobber all */);
             embedUrlStr = sanitizeURL(embedUrlStr);
             var iframeStr = '<iframe width="800" height="500" frameborder="0" src="' + embedUrlStr + '"> </iframe>';
@@ -25488,28 +25373,6 @@ var OptFrontend = /** @class */ (function (_super) {
             urlStr = sanitizeURL(urlStr);
             $('#urlOutput').val(urlStr);
         });
-        /* 2019-04-09 took this down since google's URL shortener service shut down :/
-        $('#genUrlShortenedBtn').bind('click', () => {
-          var myArgs = this.getAppState();
-          var urlStr = $.param.fragment(window.location.href, myArgs, 2); // 2 means 'override'
-          urlStr = sanitizeURL(urlStr);
-          // call goo.gl URL shortener
-          //
-          // to test this API from command-line, first disable the IP restriction on API credentials, then run:
-          // curl https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyCIjtNqfABbRilub1a3Ta7-qKF3bS9_p1M -H 'Content-Type: application/json' -d '{"longUrl": "http://www.google.com/"}'
-          $.ajax('https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyCIjtNqfABbRilub1a3Ta7-qKF3bS9_p1M',
-                 {type: 'POST',
-                 contentType: 'application/json',
-                 data: JSON.stringify({longUrl: urlStr}), // encode as a string first! #tricky
-                 success: function(dat) {
-                   $("#urlOutputShortened").val(dat.id);
-                 },
-                 error: function() {
-                   $("#urlOutputShortened").val("Error in URL shortener :(");
-                 }
-                 });
-        });
-        */
         // first initialize options from HTML LocalStorage. very important
         // that this code runs FIRST so that options get overridden by query
         // string options and anything else the user wants to override with.
@@ -29316,95 +29179,7 @@ exports.PY3_EXAMPLES = {
     tortureLink: "closures/student-torture.txt",
     nonlocalLink: "nonlocal.txt",
 };
-exports.javaExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">Java Examples</p>\n\n<p>\nBasic:\n<a class=\"exampleLink\" id=\"javaVarLink\" href=\"#\">Variables</a> |\n<a class=\"exampleLink\" id=\"javaCFLink\" href=\"#\">ControlFlow</a> |\n<a class=\"exampleLink\" id=\"javaSqrtLink\" href=\"#\">Sqrt</a> |\n<a class=\"exampleLink\" id=\"javaExecLimitLink\" href=\"#\">ExecLimit</a> |\n<a class=\"exampleLink\" id=\"javaStringsLink\" href=\"#\">Strings</a>\n</p>\n\n<p>\nMethods:\n<a class=\"exampleLink\" id=\"javaPassByValLink\" href=\"#\">PassByValue</a> |\n<a class=\"exampleLink\" id=\"javaRecurLink\" href=\"#\">Recursion</a> |\n<a class=\"exampleLink\" id=\"javaSOLink\" href=\"#\">StackOverflow</a>\n</p>\n\n<p>\nOOP:\n<a class=\"exampleLink\" id=\"javaRolexLink\" href=\"#\">Rolex</a> |\n<a class=\"exampleLink\" id=\"javaPersonLink\" href=\"#\">Person</a> |\n<a class=\"exampleLink\" id=\"javaComplexLink\" href=\"#\">Complex</a> |\n<a class=\"exampleLink\" id=\"javaCastingLink\" href=\"#\">Casting</a>\n</p>\n\n<p>\nData structures:\n<a class=\"exampleLink\" id=\"javaLLLink\" href=\"#\">LinkedList</a> |\n<a class=\"exampleLink\" id=\"javaStackQueueLink\" href=\"#\">StackQueue</a> |\n<a class=\"exampleLink\" id=\"javaPostfixLink\" href=\"#\">Postfix</a> |\n<a class=\"exampleLink\" id=\"javaSTLink\" href=\"#\">SymbolTable</a>\n</p>\n\n<p>\nJava features:\n<a class=\"exampleLink\" id=\"javaToStringLink\" href=\"#\">ToString</a> |\n<a class=\"exampleLink\" id=\"javaReflectLink\" href=\"#\">Reflect</a> |\n<a class=\"exampleLink\" id=\"javaExceptionLink\" href=\"#\">Exception</a> |\n<a class=\"exampleLink\" id=\"javaExceptionFlowLink\" href=\"#\">ExceptionFlow</a> |\n<a class=\"exampleLink\" id=\"javaTwoClassesLink\" href=\"#\">TwoClasses</a>\n</p>\n\n<p>\nMisc:\n<a class=\"exampleLink\" id=\"javaForestLink\" href=\"#\">Forest</a> |\n<a class=\"exampleLink\" id=\"javaKnapsackLink\" href=\"#\">Knapsack</a> |\n<a class=\"exampleLink\" id=\"javaStaticInitLink\" href=\"#\">StaticInitializer</a> |\n<a class=\"exampleLink\" id=\"javaSyntheticLink\" href=\"#\">Synthetic</a>\n</p>\n\n<p style=\"margin-top: 5px;\">(All Java examples created by <a href=\"https://github.com/daveagp\">David Pritchard</a>)</p>";
-exports.JAVA_EXAMPLES = {
-    javaVarLink: 'Variables.java',
-    javaCFLink: 'ControlFlow.java',
-    javaSqrtLink: 'Sqrt.java',
-    javaExecLimitLink: 'ExecLimit.java',
-    javaStringsLink: 'Strings.java',
-    javaPassByValLink: 'PassByValue.java',
-    javaRecurLink: 'Recursion.java',
-    javaSOLink: 'StackOverflow.java',
-    javaRolexLink: 'Rolex.java',
-    javaPersonLink: 'Person.java',
-    javaComplexLink: 'Complex.java',
-    javaCastingLink: 'Casting.java',
-    javaLLLink: 'LinkedList.java',
-    javaStackQueueLink: 'StackQueue.java',
-    javaPostfixLink: 'Postfix.java',
-    javaSTLink: 'SymbolTable.java',
-    javaToStringLink: 'ToString.java',
-    javaReflectLink: 'Reflect.java',
-    javaExceptionLink: 'Exception.java',
-    javaExceptionFlowLink: 'ExceptionFlow.java',
-    javaTwoClassesLink: 'TwoClasses.java',
-    javaForestLink: 'Forest.java',
-    javaKnapsackLink: 'Knapsack.java',
-    javaStaticInitLink: 'StaticInitializer.java',
-    javaSyntheticLink: 'Synthetic.java',
-};
-exports.jsExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">JavaScript Examples</p>\n\n<p style=\"margin-top: 5px;\">\n  <a class=\"exampleLink\" id=\"jsFactExLink\" href=\"#\">factorial</a> |\n  <a class=\"exampleLink\" id=\"jsDatatypesExLink\" href=\"#\">data types</a> |\n  <a class=\"exampleLink\" id=\"jsExceptionExLink\" href=\"#\">exception</a> |\n  <a class=\"exampleLink\" id=\"jsClosureExLink\" href=\"#\">closure</a> |\n  <a class=\"exampleLink\" id=\"jsShadowingExLink\" href=\"#\">shadowing</a> |\n  <a class=\"exampleLink\" id=\"jsConstructorExLink\" href=\"#\">constructor</a> |\n  <a class=\"exampleLink\" id=\"jsInhExLink\" href=\"#\">inheritance</a>\n</p>";
-exports.JS_EXAMPLES = {
-    jsFactExLink: 'fact.js',
-    jsDatatypesExLink: 'data-types.js',
-    jsExceptionExLink: 'caught-exception.js',
-    jsClosureExLink: 'closure1.js',
-    jsShadowingExLink: 'var-shadowing2.js',
-    jsConstructorExLink: 'constructor.js',
-    jsInhExLink: 'inheritance.js',
-};
-exports.tsExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">TypeScript Examples</p>\n\n<p style=\"margin-top: 5px;\">\n  <a class=\"exampleLink\" id=\"tsHelloExLink\" href=\"#\">hello</a> |\n  <a class=\"exampleLink\" id=\"tsGreeterExLink\" href=\"#\">classes</a> |\n  <a class=\"exampleLink\" id=\"tsInheritanceExLink\" href=\"#\">inheritance</a> |\n  <a class=\"exampleLink\" id=\"tsGreeterGenericsExLink\" href=\"#\">generics</a>\n</p>";
-exports.TS_EXAMPLES = {
-    tsHelloExLink: 'hello.ts',
-    tsGreeterExLink: 'greeter.ts',
-    tsGreeterGenericsExLink: 'greeter-generics.ts',
-    tsInheritanceExLink: 'inheritance.ts',
-};
-exports.rubyExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">Ruby Examples</p>\n\n<p style=\"margin-top: 5px;\">\n  <a class=\"exampleLink\" id=\"rubyContainersLink\" href=\"#\">Containers</a> |\n  <a class=\"exampleLink\" id=\"rubyGlobalsLink\" href=\"#\">Globals</a> |\n  <a class=\"exampleLink\" id=\"rubyConstantsLink\" href=\"#\">Constants</a> |\n  <a class=\"exampleLink\" id=\"rubyBlocksLink\" href=\"#\">Blocks</a> |\n  <a class=\"exampleLink\" id=\"rubyBlocksScopingLink\" href=\"#\">Block scoping</a> |\n  <a class=\"exampleLink\" id=\"rubyBlocksScoping3Link\" href=\"#\">More block scoping</a>\n  <p/>\n  <a class=\"exampleLink\" id=\"rubyProcLink\" href=\"#\">Proc & Lambda</a> |\n  <a class=\"exampleLink\" id=\"rubyProcScopingLink\" href=\"#\">Proc scoping</a> |\n  <a class=\"exampleLink\" id=\"rubyProcReturnLink\" href=\"#\">Proc return</a> |\n  <a class=\"exampleLink\" id=\"rubyLambdaScopingLink\" href=\"#\">Lambda scoping</a> |\n  <a class=\"exampleLink\" id=\"rubyInheritanceLink\" href=\"#\">Inheritance</a> |\n  <a class=\"exampleLink\" id=\"rubySymbolsLink\" href=\"#\">Symbols</a>\n  <p/>\n  <a class=\"exampleLink\" id=\"rubyPrivateProtectedLink\" href=\"#\">Protected & private</a> |\n  <a class=\"exampleLink\" id=\"rubyInstClassVarsComplexLink\" href=\"#\">Class & instance vars</a> |\n  <a class=\"exampleLink\" id=\"rubyToplevelLink\" href=\"#\">Toplevel defs</a> |\n  <a class=\"exampleLink\" id=\"rubyMegagreeterLink\" href=\"#\">Megagreeter</a>\n</p>";
-exports.RUBY_EXAMPLES = {
-    rubyBlocksLink: 'blocks-basic.rb',
-    rubyBlocksScopingLink: 'blocks-scoping-2.rb',
-    rubyInheritanceLink: 'class-inheritance.rb',
-    rubyConstantsLink: 'constants-4.rb',
-    rubyContainersLink: 'container-data-types.rb',
-    rubyGlobalsLink: 'globals.rb',
-    rubyLambdaScopingLink: 'lambda-scoping-2.rb',
-    rubyMegagreeterLink: 'megagreeter.rb',
-    rubyProcLink: 'proc-basic.rb',
-    rubyProcScopingLink: 'proc-scoping.rb',
-    rubySymbolsLink: 'symbols.rb',
-    rubyPrivateProtectedLink: 'class-private-protected.rb',
-    rubyInstClassVarsComplexLink: 'inst-class-vars-complex.rb',
-    rubyToplevelLink: 'toplevel-inst-class-vars.rb',
-    rubyBlocksScoping3Link: 'blocks-scoping-3.rb',
-    rubyProcReturnLink: 'proc-return.rb',
-};
-exports.cExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">C Examples</p>\n\n<p style=\"margin-top: 5px;\">\n  <a class=\"exampleLink\" id=\"cMengThesisLink\" href=\"#\">Thesis</a> |\n  <a class=\"exampleLink\" id=\"cGlobalsLink\" href=\"#\">Globals</a> |\n  <a class=\"exampleLink\" id=\"cStructLink\" href=\"#\">Structs</a> |\n  <a class=\"exampleLink\" id=\"cNestedStructLink\" href=\"#\">Nested structs</a> |\n  <a class=\"exampleLink\" id=\"cArrOverflowLink\" href=\"#\">Array overflow</a> |\n  <a class=\"exampleLink\" id=\"cArrParamLink\" href=\"#\">Array param</a>\n  <p/>\n  <a class=\"exampleLink\" id=\"cStringRevLink\" href=\"#\">String reverse</a> |\n  <a class=\"exampleLink\" id=\"cPtrLevelsLink\" href=\"#\">Pointer levels</a> |\n  <a class=\"exampleLink\" id=\"cPtrChainLink\" href=\"#\">Pointer chain</a> |\n  <a class=\"exampleLink\" id=\"cPtrWildLink\" href=\"#\">Pointers wild</a> |\n  <a class=\"exampleLink\" id=\"cTypedefLink\" href=\"#\">Typedef</a>\n</p>";
-exports.C_EXAMPLES = {
-    cArrOverflowLink: 'array-overflow.c',
-    cArrParamLink: 'array-param.c',
-    cNestedStructLink: 'fjalar-NestedStructTest.c',
-    cPtrLevelsLink: 'fjalar-pointer-levels.c',
-    //cStringArraysLink: 'fjalar-string-arrays.c',
-    cGlobalsLink: 'globals.c',
-    cMengThesisLink: 'meng-thesis-example.c',
-    cPtrChainLink: 'pointer-chain.c',
-    cPtrWildLink: 'pointers-gone-wild.c',
-    cStringRevLink: 'string-reverse-inplace.c',
-    cStructLink: 'struct-basic.c',
-    cTypedefLink: 'typedef-test.c',
-};
-exports.cppExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">C++ Examples</p>\n\n<p style=\"margin-top: 5px;\">\n  <a class=\"exampleLink\" id=\"cppFirstLink\" href=\"#\">Basic</a> |\n  <a class=\"exampleLink\" id=\"cppPassRefLink\" href=\"#\">Pass by ref</a> |\n  <a class=\"exampleLink\" id=\"cppClassLink\" href=\"#\">Class</a> |\n  <a class=\"exampleLink\" id=\"cppClassPtrLink\" href=\"#\">Class pointer</a> |\n  <a class=\"exampleLink\" id=\"cppDateLink\" href=\"#\">Date class</a> |\n  <a class=\"exampleLink\" id=\"cppInheritLink\" href=\"#\">Inheritance</a> |\n  <a class=\"exampleLink\" id=\"cppVirtualLink\" href=\"#\">Virtual method</a>\n</p>";
-exports.CPP_EXAMPLES = {
-    cppClassLink: 'cpp-class-basic.cpp',
-    cppDateLink: 'cpp-class-date.cpp',
-    cppClassPtrLink: 'cpp-class-pointers.cpp',
-    cppFirstLink: 'cpp-first.cpp',
-    cppInheritLink: 'cpp-inheritance.cpp',
-    cppPassRefLink: 'cpp-pass-by-ref.cpp',
-    cppVirtualLink: 'cpp-virtual-method.cpp',
-};
+// P-Tutor: Java/JS/TS/Ruby/C/C++ example lists removed (Python only).
 
 
 /***/ })

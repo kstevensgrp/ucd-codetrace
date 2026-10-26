@@ -87,7 +87,7 @@ export class OptFrontend extends AbstractBaseFrontend {
       (myArgs as any).codeDivWidth = ExecutionVisualizer.DEFAULT_EMBEDDED_CODE_DIV_WIDTH;
       (myArgs as any).codeDivHeight = ExecutionVisualizer.DEFAULT_EMBEDDED_CODE_DIV_HEIGHT;
 
-      var domain = "http://pythontutor.com/"; // for deployment
+      var domain = window.location.origin + "/"; // P-Tutor: whatever host serves this page
       var embedUrlStr = $.param.fragment(domain + "iframe-embed.html", myArgs, 2 /* clobber all */);
       embedUrlStr = sanitizeURL(embedUrlStr);
       var iframeStr = '<iframe width="800" height="500" frameborder="0" src="' + embedUrlStr + '"> </iframe>';
@@ -120,28 +120,6 @@ export class OptFrontend extends AbstractBaseFrontend {
       $('#urlOutput').val(urlStr);
     });
 
-    /* 2019-04-09 took this down since google's URL shortener service shut down :/
-    $('#genUrlShortenedBtn').bind('click', () => {
-      var myArgs = this.getAppState();
-      var urlStr = $.param.fragment(window.location.href, myArgs, 2); // 2 means 'override'
-      urlStr = sanitizeURL(urlStr);
-      // call goo.gl URL shortener
-      //
-      // to test this API from command-line, first disable the IP restriction on API credentials, then run:
-      // curl https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyCIjtNqfABbRilub1a3Ta7-qKF3bS9_p1M -H 'Content-Type: application/json' -d '{"longUrl": "http://www.google.com/"}'
-      $.ajax('https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyCIjtNqfABbRilub1a3Ta7-qKF3bS9_p1M',
-             {type: 'POST',
-             contentType: 'application/json',
-             data: JSON.stringify({longUrl: urlStr}), // encode as a string first! #tricky
-             success: function(dat) {
-               $("#urlOutputShortened").val(dat.id);
-             },
-             error: function() {
-               $("#urlOutputShortened").val("Error in URL shortener :(");
-             }
-             });
-    });
-    */
 
     // first initialize options from HTML LocalStorage. very important
     // that this code runs FIRST so that options get overridden by query

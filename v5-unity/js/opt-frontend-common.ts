@@ -18,7 +18,7 @@ declare var codeopticonSession: string;  // FIX later when porting Codeopticon
 require('./lib/jquery.ba-dotimeout.min.js');
 
 // need to directly import the class for type checking to work
-import {ExecutionVisualizer, assert, htmlspecialchars} from './pytutor';
+import {ExecutionVisualizer, assert, htmlspecialchars, setPythonVersionString} from './pytutor';
 import {nullTraceErrorLst,unsupportedFeaturesStr} from './footer-html';
 
 
@@ -70,51 +70,15 @@ export abstract class AbstractBaseFrontend {
     '2': 'web_exec_py2.py',
     '3': 'web_exec_py3.py',
 
-    // empty dummy scripts just to do logging on Apache server
-    'js':   'web_exec_js.py',
-    'ts':   'web_exec_ts.py',
-    'java': 'web_exec_java.py',
-    'ruby': 'web_exec_ruby.py',
-    'c':   'web_exec_c.py',
-    'cpp': 'web_exec_cpp.py',
-
-    // experimental!
-    'py3anaconda': 'web_exec_py3anaconda.py',
   };
 
-  // these settings are all customized for my own server setup,
-  // so you will need to customize for your server:
-  serverRoot = (window.location.protocol === 'https:') ?
-                'https://cokapi.com/' : // my certificate for https is registered via cokapi.com, so use it for now
-                'http://cokapi.com/';   // try cokapi.com so that hopefully it works through firewalls better than directly using its IP addr (which should be 104.237.139.253)
-                                        // (but that's just an unsubstantiated hunch)
-
-  // randomly pick one backup server to load balance:
-  backupHttpServerRoot = (Math.random() >= 0.5) ? 'http://45.33.41.179/' : 'http://23.239.12.25/';
-
-  // see ../../v4-cokapi/cokapi.js for details
+  // P-Tutor: upstream also mapped js/ts/java/ruby/c/cpp/py3anaconda to JSONP
+  // endpoints on cokapi.com (plus two raw-IP backup servers). Only Python
+  // runs here, on this server, so those are gone. opt-live.ts still reads
+  // this map, hence the nulls.
   langSettingToJsonpEndpoint = {
     '2':    null,
     '3':    null,
-    'js':   this.serverRoot + 'exec_js_jsonp',
-    'ts':   this.serverRoot + 'exec_ts_jsonp',
-    'java': this.serverRoot + 'exec_java_jsonp',
-    'ruby': this.serverRoot + 'exec_ruby_jsonp',
-    'c':    this.serverRoot + 'exec_c_jsonp',
-    'cpp':  this.serverRoot + 'exec_cpp_jsonp',
-    'py3anaconda':  this.serverRoot + 'exec_pyanaconda_jsonp',
-  };
-
-  langSettingToJsonpEndpointBackup = {
-    '2':    null,
-    '3':    null,
-    'js':   this.backupHttpServerRoot + 'exec_js_jsonp',
-    'ts':   this.backupHttpServerRoot + 'exec_ts_jsonp',
-    'java': this.backupHttpServerRoot + 'exec_java_jsonp',
-    'ruby': this.backupHttpServerRoot + 'exec_ruby_jsonp',
-    'c':    this.backupHttpServerRoot + 'exec_c_jsonp',
-    'cpp':  this.backupHttpServerRoot + 'exec_cpp_jsonp',
-    'py3anaconda':  this.backupHttpServerRoot + 'exec_pyanaconda_jsonp',
   };
 
   abstract executeCode(forceStartingInstr?: number, forceRawInputLst?: string[]) : any;
@@ -122,6 +86,16 @@ export abstract class AbstractBaseFrontend {
   abstract handleUncaughtException(trace: any[]) : any; // called by executeCodeAndCreateViz
 
   constructor(params: any = {}) {
+    // P-Tutor: ask the server which Python it runs and label the UI with it,
+    // instead of upstream's hard-coded "Python 3.6".
+    $.get('python_version.txt', (v) => {
+      v = String(v).trim();
+      if (/^\d+\.\d+/.test(v)) {
+        setPythonVersionString(v);
+        $('#pythonVersionSelector option[value="3"]').text('Python ' + v);
+      }
+    }, 'text');
+
     // P-Tutor: upstream generated a persistent per-browser UUID
     // (localStorage 'opt_uuid') for usage research. We don't track users.
     this.userUUID = undefined;
@@ -348,7 +322,6 @@ export abstract class AbstractBaseFrontend {
 
       var backendScript = this.langSettingToBackendScript[pyState];
       assert(backendScript);
-      var jsonp_endpoint = this.langSettingToJsonpEndpoint[pyState]; // maybe null
 
       if (!backendScript) {
         this.setFronendError(["Server configuration error: No backend script"]);
@@ -384,116 +357,7 @@ export abstract class AbstractBaseFrontend {
       }
 
       // everything below here is an ajax (async) call to the server ...
-      if (jsonp_endpoint) {
-        assert (pyState !== '2' && pyState !== '3');
-
-        // 2018-08-19: this is an uncommon use case (only used for https iframe embedding)
-        if (jsonp_endpoint.indexOf('https:') == 0) {
-            this.setFronendError(["Error: https execution of non-Python code is not currently supported. [#nonPythonHttps]"]);
-            this.doneExecutingCode();
-            return;
-        }
-
-        var retryOnBackupServer = () => {
-          // first log a #TryBackup error entry:
-          this.setFronendError(["Main server is busy or has errors; re-trying using backup server " + this.backupHttpServerRoot + " ... [#TryBackup]"]);
-
-          // now re-try the query using the backup server:
-          var backup_jsonp_endpoint = this.langSettingToJsonpEndpointBackup[pyState];
-          assert(backup_jsonp_endpoint);
-          $.ajax({
-            url: backup_jsonp_endpoint,
-            // The name of the callback parameter, as specified by the YQL service
-            jsonp: "callback",
-            dataType: "jsonp",
-            data: {user_script : codeToExec,
-                   options_json: JSON.stringify(backendOptionsObj),
-                   raw_input_json: this.rawInputLst.length > 0 ? JSON.stringify(this.rawInputLst) : null,
-                  },
-            success: callbackWrapper
-          });
-        }
-
-        // for non-python, this should be a dummy script for logging
-        // only, and to check whether there's a 414 error for #CodeTooLong
-        $.get(backendScript,
-              {user_script : codeToExec,
-               options_json: JSON.stringify(backendOptionsObj)},
-               (dat) => {
-                // this is super important! only if this first call is a
-                // SUCCESS do we actually make the REAL call using JSONP.
-                // the reason why is that we might get a 414 error for
-                // #CodeTooLong if we try to execute this code, in which
-                // case we want to either re-try or bail out. this also
-                // keeps the control flow synchronous. we always try
-                // the original backendScript, and then we try
-                // jsonp_endpoint only if that's successful:
-
-                // the REAL call uses JSONP
-                // http://learn.jquery.com/ajax/working-with-jsonp/
-                $.ajax({
-                  url: jsonp_endpoint,
-
-                  // for testing
-                  //url: 'http://cokapi.com/test_failure_jsonp',
-                  //url: 'http://cokapi.com/unknown_url',
-
-                  // The name of the callback parameter, as specified by the YQL service
-                  jsonp: "callback",
-                  dataType: "jsonp",
-                  data: {user_script : codeToExec,
-                         options_json: JSON.stringify(backendOptionsObj),
-                         raw_input_json: this.rawInputLst.length > 0 ? JSON.stringify(this.rawInputLst) : null,
-                        },
-                  success: (dataFromBackend) => {
-                    var trace = dataFromBackend.trace;
-                    var shouldRetry = false;
-
-                    // the cokapi backend responded successfully, but the
-                    // backend may have issued an error. if so, then
-                    // RETRY with backupHttpServerRoot. otherwise let it
-                    // through to callbackWrapper
-                    if (!trace ||
-                        (trace.length == 0) ||
-                        (trace[trace.length - 1].event == 'uncaught_exception')) {
-                      if (trace.length == 1) {
-                        // we should only retry if there's a legit
-                        // backend error and not just a syntax error:
-                        var msg = trace[0].exception_msg;
-                        if (msg.indexOf('#BackendError') >= 0) {
-                          shouldRetry = true;
-                        }
-                      } else {
-                        shouldRetry = true;
-                      }
-                    }
-
-                    // don't bother re-trying for https since we don't
-                    // currently have an https backup server
-                    if (window.location.protocol === 'https:') {
-                      shouldRetry = false;
-                    }
-
-                    if (shouldRetry) {
-                      retryOnBackupServer();
-                    } else {
-                      // accept our fate without retrying
-                      callbackWrapper(dataFromBackend);
-                    }
-                  },
-                  // if there's a server error, then ALWAYS retry:
-                  error: (jqXHR, textStatus, errorThrown) => {
-                    retryOnBackupServer();
-                    // use 'global: false;' below to NOT run the generic ajaxError() function
-                  },
-
-                  global: false, // VERY IMPORTANT! do not call the generic ajaxError() function when there's an error;
-                                 // only call our error handler above; http://api.jquery.com/ajaxerror/
-                });
-
-               }, "text");
-
-      } else {
+      {
         // for Python 2 or 3, directly execute backendScript
         assert (pyState === '2' || pyState === '3');
         $.get(backendScript,
