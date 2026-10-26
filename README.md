@@ -1,78 +1,25 @@
-Python Tutor -- http://pythontutor.com/ -- helps people overcome a fundamental barrier to learning programming: understanding what happens as the computer executes each line of a program's source code. Using this tool, you can write Python, Java, JavaScript, TypeScript, Ruby, C, and C++ programs in your Web browser and visualize what the computer is doing step-by-step as it executes those programs.
+# P-Tutor at UC Davis
 
-This tool was created by [Philip Guo](http://pgbovine.net/) in January 2010. [See project history](history.txt).
+P-Tutor at UC Davis — a fork of the final open-source release (2020) of Python Tutor by Philip Guo, for stepping through code execution, with access to course data files. MIT licensed.
 
-[List of unsupported features and known bugs](https://github.com/pgbovine/OnlinePythonTutor/blob/master/unsupported-features.md)
+**P-Tutor at UC Davis** is a program visualizer used in UC Davis computer science courses. Paste in code, run it, and step forward and backward through execution while watching variables, objects, references, and stack frames change. It is a fork of the final open-source release (v5, MIT license, 2020) of Philip Guo's [Python Tutor](https://pythontutor.com), adapted to run on a modern Python, carry UC Davis branding, and let student programs read instructor-provided data files. The "P" is Python today and Programming once more languages are turned on.
 
-The latest development version of the code is in [v5-unity](v5-unity/),
-although lots of legacy documentation still resides in [v3](v3/).
+## Layout
 
+- `v5-unity/` — the code this project runs: TypeScript/webpack frontend (prebuilt bundles in `build/`), Python tracer (`pg_logger.py`, `pg_encoder.py`), and `bottle_server.py` for local development.
+- `v3/`, `v1-v2/` — earlier generations, kept for history.
+- `v4-cokapi/` — upstream's Node service for the Java/C/C++/JavaScript/Ruby backends (not used here yet).
 
-### Quick Start
+## Quick start (Python visualizer only)
 
-BY FAR the most preferred way to use Python Tutor is via the official website, since it contains the latest updates: http://pythontutor.com/
-
-You can use [iframe embedding](v3/docs/embedding-HOWTO.md) to easily embed visualizations on your webpage.
-
-If you want to run locally on your own computer, to run Python visualizations try:
-
-```
-pip install bottle # make sure the bottle webserver (http://bottlepy.org/) is installed
-cd OnlinePythonTutor/v5-unity/
-python bottle_server.py
+```sh
+cd v5-unity
+pip install bottle
+python3 bottle_server.py        # then open http://localhost:8003/visualize.html
 ```
 
-You should see the visualizer at: http://localhost:8003/visualize.html
+`bottle_server.py` is a development server with no sandboxing; do not expose it directly.
 
-... and the live programming environment at: http://localhost:8003/live.html 
+## Attribution
 
-However, it can be hard to run your own visualizer locally for
-non-Python languages, since there are complex dependencies in v4-cokapi/ that
-I haven't yet cleanly packaged up. By default, the local version you run will
-*call my own server to run the non-Python backends*, so please be mindful of
-your bandwidth usage.
-
-Note: *I can't provide technical support for users who want to install Python Tutor on their own computers/servers ([read details here](https://github.com/pgbovine/OnlinePythonTutor/blob/master/unsupported-features.md)).*
-
-For further directions, see [Overview for Developers](v3/docs/developer-overview.md) or explore the [rest of the docs](v3/docs/).
-
-
-### Acknowledgments
-
-For code or security contributions:
-- Irene Chen - experimental holistic visualization mode - v3/js/holistic.js
-- John DeNero - helping with the official Python 3 port, bug fixes galore
-- Mark Liffiton - localStorage bug fix
-- Chris Meyers - custom visualizations such as v3/matrix.py and v3/htmlFrame.py
-- Brad Miller - adding pop-up question dialogs to visualizations, other bug fixes
-- David Pritchard and Will Gwozdz - Java visualizer and other frontend enhancements
-- Peter Robinson - v3/make_visualizations.py
-- Peter Wentworth and his students - working on the original Python 3 fork circa 2010-2011
-- Security tips and vulnerability reports: Aaron E. (https://arinerron.com), Chris Horne (https://github.com/lahwran), Joshua Landau (joshua@landau.ws), David Wyde (https://davidwyde.com/)
-
-For user testing and feedback from instructors' perspectives:
-- Ned Batchelder
-- Jennifer Campbell
-- John Dalbey
-- John DeNero
-- Fredo Durand
-- Michael Ernst
-- David Evans
-- Paul Gries
-- Mark Guzdial
-- Adam Hartz
-- Sean Lip
-- Fernando Perez
-- Tomas Lozano-Perez
-- Bertram Ludaescher
-- Brad Miller
-- Rob Miller
-- Peter Norvig
-- Andrew Petersen
-- David Pritchard
-- Suzanne Rivoire
-- Guido van Rossum
-- Peter Wentworth
-- David Wilkins
-
-... and many, many more!
+Original work Copyright (C) Philip Guo, released under the MIT License (see `LICENSE.txt`). The upstream repository, `pgbovine/OnlinePythonTutor`, was removed from GitHub in 2020; this history was recovered from the `loongyowl/OnlinePythonTutor` fork. Python Tutor is Philip Guo's project and name; P-Tutor is not affiliated with or endorsed by it.
