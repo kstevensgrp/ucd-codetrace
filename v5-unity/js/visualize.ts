@@ -5,14 +5,7 @@
 import {OptFrontendSharedSessions,TogetherJS} from './opt-shared-sessions';
 import {assert,htmlspecialchars} from './pytutor';
 import {OptTestcases,redSadFace,yellowHappyFace} from './opt-testcases';
-import {pythonExamplesHtml,PY2_EXAMPLES,PY3_EXAMPLES,
-        javaExamplesHtml,JAVA_EXAMPLES,
-        jsExamplesHtml,JS_EXAMPLES,
-        tsExamplesHtml,TS_EXAMPLES,
-        rubyExamplesHtml,RUBY_EXAMPLES,
-        cExamplesHtml,C_EXAMPLES,
-        cppExamplesHtml,CPP_EXAMPLES,
-        exampleHeaderHtml} from './example-links';
+import {pythonExamplesHtml,PY2_EXAMPLES,PY3_EXAMPLES} from './example-links';
 import {footerHtml} from './footer-html';
 
 require('./lib/jquery-3.0.0.min.js');
@@ -656,42 +649,20 @@ export class OptFrontendWithTestcases extends OptFrontendSharedSessions {
 
 $(document).ready(function() {
   // initialize all HTML elements before creating optFrontend object
-  $("#exampleSnippets")
-    .append(exampleHeaderHtml);
+  // P-Tutor: Python examples only (upstream also appended the course list
+  // and Java/JS/TS/Ruby/C/C++ examples, with an optOverride branch for the
+  // per-language pages).
+  $("#exampleSnippets").append(pythonExamplesHtml);
 
   var params = {};
   var optOverride = (window as any).optOverride;
-  // super hacky!
   if (optOverride) {
     (params as any).disableLocalStorageToggles = true;
-
-    if (optOverride.frontendLang === 'java') {
-      $("#exampleSnippets").append(javaExamplesHtml);
-    } else if (optOverride.frontendLang === 'js') {
-      $("#exampleSnippets").append(jsExamplesHtml);
-    } else if (optOverride.frontendLang === 'ts') {
-      $("#exampleSnippets").append(tsExamplesHtml);
-    } else if (optOverride.frontendLang === 'ruby') {
-      $("#exampleSnippets").append(rubyExamplesHtml);
-    } else if (optOverride.frontendLang === 'c') {
-      $("#exampleSnippets").append(cExamplesHtml);
-    } else if (optOverride.frontendLang === 'cpp') {
-      $("#exampleSnippets").append(cppExamplesHtml);
-    }
-  } else {
-    $("#exampleSnippets")
-      .append(pythonExamplesHtml)
-      .append(javaExamplesHtml)
-      .append(jsExamplesHtml)
-      .append(tsExamplesHtml)
-      .append(rubyExamplesHtml)
-      .append(cExamplesHtml)
-      .append(cppExamplesHtml);
   }
   $("#footer").append(footerHtml);
 
   // insert a toggle for examples after #exampleSnippets, then hide it
-  $("#exampleSnippets").after('<a href="#" id="showExampleLink" style="font-size: 11pt;">Show example code and courses</a>');
+  $("#exampleSnippets").after('<a href="#" id="showExampleLink" style="font-size: 11pt;">Show example code</a>');
   $("#showExampleLink").click(() => {
     $("#exampleSnippets").show();
     $("#showExampleLink").hide();
@@ -709,25 +680,8 @@ $(document).ready(function() {
     var myId = $(this).attr('id');
     var exFile;
     var lang;
-    if (JS_EXAMPLES[myId] !== undefined) {
-      exFile = JS_EXAMPLES[myId];
-      lang = 'js';
-    } else if (TS_EXAMPLES[myId] !== undefined) {
-      exFile = TS_EXAMPLES[myId];
-      lang = 'ts';
-    } else if (JAVA_EXAMPLES[myId] !== undefined) {
-      exFile = JAVA_EXAMPLES[myId];
-      lang = 'java';
-    } else if (RUBY_EXAMPLES[myId] !== undefined) {
-      exFile = RUBY_EXAMPLES[myId];
-      lang = 'ruby';
-    } else if (C_EXAMPLES[myId] !== undefined) {
-      exFile = C_EXAMPLES[myId];
-      lang = 'c';
-    } else if (CPP_EXAMPLES[myId] !== undefined) {
-      exFile = CPP_EXAMPLES[myId];
-      lang = 'cpp';
-    } else if (PY2_EXAMPLES[myId] !== undefined) {
+    // P-Tutor: Python examples only
+    if (PY2_EXAMPLES[myId] !== undefined) {
       exFile = PY2_EXAMPLES[myId];
       if ($('#pythonVersionSelector').val() === '3') {
         lang = '3';
@@ -742,11 +696,7 @@ $(document).ready(function() {
     assert(lang);
     $('#pythonVersionSelector').val(lang);
 
-    if (lang === '2' || lang === '3' || lang === 'py3anaconda') {
-      exFile = 'example-code/python/' + exFile;
-    } else {
-      exFile = 'example-code/' + lang + '/' + exFile;
-    }
+    exFile = 'example-code/python/' + exFile;
 
     $.get(exFile, function(dat) {
       optFrontend.pyInputSetValue(dat);

@@ -8,7 +8,7 @@ SUFFIX = '"'
 
 STUFF_RE = re.compile(PREFIX + '(build/.*[.]js).*?' + SUFFIX)
 
-print 'Added cache-busting hashes to these HTML files:'
+print('Added cache-busting hashes to these HTML files:')
 
 for f in os.listdir('.'):
   if f.endswith('.html'):
@@ -22,7 +22,7 @@ for f in os.listdir('.'):
           md5_hash = hashlib.md5(open(js_filename, 'rb').read()).hexdigest()
           md5_hash = md5_hash[:10] # truncate to prettify
           modified_line = re.sub(STUFF_RE, 'src="' + js_filename + '?' + md5_hash + SUFFIX, line)
-          print f + ':' + modified_line,
+          print(f + ':' + modified_line, end='')
           out.write(modified_line)
         else:
           out.write(line)

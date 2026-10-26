@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start": "python3 bottle_server.py",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack && python3 add_cache_busting_query_strings.py",
     "watch": "NODE_OPTIONS=--openssl-legacy-provider webpack --devtool sourcemap --progress --watch",
-    "production-build": "rm -f build/* && npm run build && python3 add_cache_busting_query_strings.py"
+    "production-build": "rm -f build/* && npm run build"
   },
   "devDependencies": {
     "css-loader": "0.28.11",

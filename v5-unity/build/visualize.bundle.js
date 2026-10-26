@@ -28974,45 +28974,18 @@ var OptFrontendWithTestcases = /** @class */ (function (_super) {
 exports.OptFrontendWithTestcases = OptFrontendWithTestcases;
 $(document).ready(function () {
     // initialize all HTML elements before creating optFrontend object
-    $("#exampleSnippets")
-        .append(example_links_1.exampleHeaderHtml);
+    // P-Tutor: Python examples only (upstream also appended the course list
+    // and Java/JS/TS/Ruby/C/C++ examples, with an optOverride branch for the
+    // per-language pages).
+    $("#exampleSnippets").append(example_links_1.pythonExamplesHtml);
     var params = {};
     var optOverride = window.optOverride;
-    // super hacky!
     if (optOverride) {
         params.disableLocalStorageToggles = true;
-        if (optOverride.frontendLang === 'java') {
-            $("#exampleSnippets").append(example_links_1.javaExamplesHtml);
-        }
-        else if (optOverride.frontendLang === 'js') {
-            $("#exampleSnippets").append(example_links_1.jsExamplesHtml);
-        }
-        else if (optOverride.frontendLang === 'ts') {
-            $("#exampleSnippets").append(example_links_1.tsExamplesHtml);
-        }
-        else if (optOverride.frontendLang === 'ruby') {
-            $("#exampleSnippets").append(example_links_1.rubyExamplesHtml);
-        }
-        else if (optOverride.frontendLang === 'c') {
-            $("#exampleSnippets").append(example_links_1.cExamplesHtml);
-        }
-        else if (optOverride.frontendLang === 'cpp') {
-            $("#exampleSnippets").append(example_links_1.cppExamplesHtml);
-        }
-    }
-    else {
-        $("#exampleSnippets")
-            .append(example_links_1.pythonExamplesHtml)
-            .append(example_links_1.javaExamplesHtml)
-            .append(example_links_1.jsExamplesHtml)
-            .append(example_links_1.tsExamplesHtml)
-            .append(example_links_1.rubyExamplesHtml)
-            .append(example_links_1.cExamplesHtml)
-            .append(example_links_1.cppExamplesHtml);
     }
     $("#footer").append(footer_html_1.footerHtml);
     // insert a toggle for examples after #exampleSnippets, then hide it
-    $("#exampleSnippets").after('<a href="#" id="showExampleLink" style="font-size: 11pt;">Show example code and courses</a>');
+    $("#exampleSnippets").after('<a href="#" id="showExampleLink" style="font-size: 11pt;">Show example code</a>');
     $("#showExampleLink").click(function () {
         $("#exampleSnippets").show();
         $("#showExampleLink").hide();
@@ -29027,31 +29000,8 @@ $(document).ready(function () {
         var myId = $(this).attr('id');
         var exFile;
         var lang;
-        if (example_links_1.JS_EXAMPLES[myId] !== undefined) {
-            exFile = example_links_1.JS_EXAMPLES[myId];
-            lang = 'js';
-        }
-        else if (example_links_1.TS_EXAMPLES[myId] !== undefined) {
-            exFile = example_links_1.TS_EXAMPLES[myId];
-            lang = 'ts';
-        }
-        else if (example_links_1.JAVA_EXAMPLES[myId] !== undefined) {
-            exFile = example_links_1.JAVA_EXAMPLES[myId];
-            lang = 'java';
-        }
-        else if (example_links_1.RUBY_EXAMPLES[myId] !== undefined) {
-            exFile = example_links_1.RUBY_EXAMPLES[myId];
-            lang = 'ruby';
-        }
-        else if (example_links_1.C_EXAMPLES[myId] !== undefined) {
-            exFile = example_links_1.C_EXAMPLES[myId];
-            lang = 'c';
-        }
-        else if (example_links_1.CPP_EXAMPLES[myId] !== undefined) {
-            exFile = example_links_1.CPP_EXAMPLES[myId];
-            lang = 'cpp';
-        }
-        else if (example_links_1.PY2_EXAMPLES[myId] !== undefined) {
+        // P-Tutor: Python examples only
+        if (example_links_1.PY2_EXAMPLES[myId] !== undefined) {
             exFile = example_links_1.PY2_EXAMPLES[myId];
             if ($('#pythonVersionSelector').val() === '3') {
                 lang = '3';
@@ -29067,12 +29017,7 @@ $(document).ready(function () {
         }
         pytutor_1.assert(lang);
         $('#pythonVersionSelector').val(lang);
-        if (lang === '2' || lang === '3' || lang === 'py3anaconda') {
-            exFile = 'example-code/python/' + exFile;
-        }
-        else {
-            exFile = 'example-code/' + lang + '/' + exFile;
-        }
+        exFile = 'example-code/python/' + exFile;
         $.get(exFile, function (dat) {
             optFrontend.pyInputSetValue(dat);
             optFrontend.setAceMode();
@@ -29315,12 +29260,8 @@ module.exports = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QCARXhpZgA
 
 "use strict";
 
+// P-Tutor: upstream's exampleHeaderHtml (list of edX/Coursera/Udacity courses) removed.
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exampleHeaderHtml = "<p>Here are some free courses that either already use Python Tutor or are good to use with it:\n</p>\n\n<p>\nedX:\n\n<a href=\"https://www.edx.org/course/python-data-science-uc-san-diegox-dse200x\">Python for Data Science</a> |\n<a href=\"https://www.edx.org/course/introduction-computer-science-mitx-6-00-1x-10\">Intro CS w/ Python (MIT)</a> |\n<a href=\"https://www.edx.org/course/introduction-computational-thinking-data-mitx-6-00-2x-5#!\">Data Science (MIT)</a> |\n<a href=\"https://www.edx.org/course/introduction-computer-science-harvardx-cs50x\">Intro CS (Harvard)</a> | <br/>\n<a href=\"https://www.edx.org/course/software-construction-java-mitx-6-005-1x\">Software Construction in Java</a> |\n<a href=\"https://www.edx.org/course/using-python-research-harvardx-ph526x\">Python for Research</a> |\n<a href=\"https://www.edx.org/course/statistics-probability-data-science-uc-san-diegox-dse210x\">Stats w/ Python</a> |\n<a href=\"https://www.edx.org/course/how-win-coding-competitions-secrets-itmox-i2cpx-0#!\">Coding Competitions</a>\n</p>\n\n<p>\nCoursera:\n\n<a href=\"https://www.coursera.org/learn/learn-to-program\">Intro CS w/ Python</a> |\n<a href=\"https://www.coursera.org/learn/python\">Intro Python</a> |\n<a href=\"https://www.coursera.org/learn/python-data-analysis\">Data Science w/ Python</a> |\n<a href=\"https://www.coursera.org/specializations/python\">Intro Python series</a><br/>\n</p>\n\n<p>\nUdacity:\n\n<a href=\"https://www.udacity.com/course/intro-to-computer-science--cs101\">Intro CS w/ Python</a> |\n<a href=\"https://www.udacity.com/course/intro-to-java-programming--cs046\">Intro Java</a> |\n<a href=\"https://www.udacity.com/course/intro-to-artificial-intelligence--cs271\">Intro A.I.</a> |\n<a href=\"https://www.udacity.com/course/design-of-computer-programs--cs212\">Design of Computer Programs</a> | <br/>\n<a href=\"https://www.udacity.com/course/javascript-basics--ud804\">JavaScript Basics</a> |\n<a href=\"https://www.udacity.com/course/technical-interview--ud513\">Technical Interview Prep</a>\n</p>\n\n<p>\nTextbooks:\n\n<a href=\"http://composingprograms.com/\">Composing Programs</a> |\n<a href=\"https://www.inferentialthinking.com/\">Computational Thinking</a> |\n<a href=\"http://interactivepython.org/runestone/static/thinkcspy/index.html\">Interactive Python</a> |\n<a href=\"http://runestoneinteractive.org/library.html\">Runestone Books</a>\n</p>\n\n<p style=\"margin-top: 35px;\">The examples below illustrate some of this tool's visualization capabilities but are <em>not</em> meant as standalone programming lessons. See the courses listed above for lessons.</p>";
-// extraneous:
-// <a href="https://www.edx.org/course/nature-code-biology-javascript-epflx-nic1-0x">Comp. Bio w/ JavaScript</a> | <br/>
-// <a href="https://www.edx.org/course/intermediate-c-microsoft-dev210-2x">Intermediate C++</a> |
-//<a href="https://www.coursera.org/specializations/data-science-python">Data Science w/ Python series</a>
 exports.pythonExamplesHtml = "<p style=\"margin-top: 25px; font-weight: bold;\">Python Examples</p>\n\n<p style=\"margin-top: 10px;\">Basic:\n\n<a class=\"exampleLink\" id=\"aliasExampleLink\" href=\"#\">hello</a> |\n<a class=\"exampleLink\" id=\"happyExampleLink\" href=\"#\">happy</a> |\n<a class=\"exampleLink\" id=\"tutorialExampleLink\" href=\"#\">intro</a> |\n<a class=\"exampleLink\" id=\"filterExampleLink\" href=\"#\">filter</a> |\n<a class=\"exampleLink\" id=\"strtokExampleLink\" href=\"#\">tokenize</a> |\n<a class=\"exampleLink\" id=\"insSortExampleLink\" href=\"#\">insertion sort</a> |\n<a class=\"exampleLink\" id=\"forElseLink\" href=\"#\">for-else</a> |\n<a class=\"exampleLink\" id=\"rawInputExampleLink\" href=\"#\">user input</a>\n</p>\n\n<p style=\"margin-top: 15px;\">Math:\n<a class=\"exampleLink\" id=\"factExampleLink\" href=\"#\">factorial</a> |\n<a class=\"exampleLink\" id=\"fibonacciExampleLink\" href=\"#\">fibonacci</a> |\n<a class=\"exampleLink\" id=\"memoFibExampleLink\" href=\"#\">memoized fibonacci</a> |\n<a class=\"exampleLink\" id=\"newtonExampleLink\" href=\"#\">square root</a> |\n<a class=\"exampleLink\" id=\"pwGcdLink\" href=\"#\">gcd</a> |\n<a class=\"exampleLink\" id=\"towersOfHanoiLink\" href=\"#\">towers of hanoi</a>\n</p>\n\n\n<p style=\"margin-top: 15px;\">Objects:\n\n<a class=\"exampleLink\" id=\"oop1ExampleLink\" href=\"#\">OOP 1</a> |\n<a class=\"exampleLink\" id=\"oop2ExampleLink\" href=\"#\">OOP 2</a> |\n<a class=\"exampleLink\" id=\"oopSmallExampleLink\" href=\"#\">OOP 3</a> |\n<a class=\"exampleLink\" id=\"inheritanceExampleLink\" href=\"#\">inheritance</a>\n\n</p>\n\n<p style=\"margin-top: 15px;\">Linked Lists:\n<a class=\"exampleLink\" id=\"ll1Link\" href=\"#\">LL 1</a> |\n<a class=\"exampleLink\" id=\"ll2Link\" href=\"#\">LL 2</a> |\n<a class=\"exampleLink\" id=\"sumListLink\" href=\"#\">LL sum</a>\n</p>\n\n<p style=\"margin-top: 15px;\">Pointer Aliasing:<br/>\n<a class=\"exampleLink\" id=\"aliasing1Link\" href=\"#\">aliasing1</a> |\n<a class=\"exampleLink\" id=\"aliasing2Link\" href=\"#\">aliasing2</a> |\n<a class=\"exampleLink\" id=\"aliasing3Link\" href=\"#\">aliasing3</a> |\n<a class=\"exampleLink\" id=\"aliasing4Link\" href=\"#\">aliasing4</a> |\n<a class=\"exampleLink\" id=\"aliasing5Link\" href=\"#\">aliasing5</a> |\n<a class=\"exampleLink\" id=\"aliasing6Link\" href=\"#\">aliasing6</a> |\n<a class=\"exampleLink\" id=\"aliasing7Link\" href=\"#\">aliasing7</a> |\n<a class=\"exampleLink\" id=\"aliasing8Link\" href=\"#\">aliasing8</a> |\n<a class=\"exampleLink\" id=\"pwSumListLink\" href=\"#\">sumList</a>\n</p>\n\n<p style=\"margin-top: 15px;\">Higher-Order Functions:<br/>\n\n<a class=\"exampleLink\" id=\"closure1Link\" href=\"#\">closure1</a> |\n<a class=\"exampleLink\" id=\"closure2Link\" href=\"#\">closure2</a> |\n<a class=\"exampleLink\" id=\"closure3Link\" href=\"#\">closure3</a> |\n<a class=\"exampleLink\" id=\"closure4Link\" href=\"#\">closure4</a> |\n<a class=\"exampleLink\" id=\"closure5Link\" href=\"#\">closure5</a> |\n<a class=\"exampleLink\" id=\"mapExampleLink\" href=\"#\">list map</a> |\n<a class=\"exampleLink\" id=\"sumExampleLink\" href=\"#\">summation</a> |\n<a class=\"exampleLink\" id=\"lambdaParamLink\" href=\"#\">lambda param</a>\n\n</p>\n\n<p style=\"margin-top: 15px;\">Advanced:<br/>\n<a class=\"exampleLink\" id=\"listCompLink\" href=\"#\">list comp</a> |\n<a class=\"exampleLink\" id=\"compsLink\" href=\"#\">list/set/dict comp</a> |\n<a class=\"exampleLink\" id=\"decoratorsLink\" href=\"#\">decorator</a> |\n<a class=\"exampleLink\" id=\"genPrimesLink\" href=\"#\">generator</a> |\n<a class=\"exampleLink\" id=\"genExprLink\" href=\"#\">genexpr</a> |\n<a class=\"exampleLink\" id=\"varargsLink\" href=\"#\">varargs</a> |\n<a class=\"exampleLink\" id=\"pwTryFinallyLink\" href=\"#\">exception</a> |\n<a class=\"exampleLink\" id=\"metaclassLink\" href=\"#\">metaclass</a>\n</p>\n\n<p style=\"margin-top: 15px;\">Python 3 only: <a class=\"exampleLink\" id=\"tortureLink\" href=\"#\">student torture</a> |\n<a class=\"exampleLink\" id=\"nonlocalLink\" href=\"#\">nonlocal</a>\n</p>";
 exports.PY2_EXAMPLES = {
     tutorialExampleLink: "py_tutorial.txt",
