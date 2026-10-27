@@ -1,14 +1,14 @@
 export var privacyAndEndingHTML = `
 
-<p style="margin-top: 30px;"><b>About this site:</b> P-Tutor at UC Davis is a
+<p style="margin-top: 30px;"><b>About this site:</b> CodeTrace at UC Davis is a
 free tool for UC Davis courses. It's offered as is, so please don't paste
 anything private into it, and when you use it on assignments, follow your
 course's academic integrity policy. Enjoy exploring how your code runs!</p>
 
-<p style="margin-top: 25px;">P-Tutor is an independent fork of
+<p style="margin-top: 25px;">CodeTrace is an independent fork of
 <a href="https://pythontutor.com">Python Tutor</a>, the open-source project
 created by <a href="http://www.pgbovine.net/">Philip Guo</a>, used under the
-<a href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/LICENSE.txt">MIT License</a>.
+<a href="https://github.com/kstevensgrp/ucd-codetrace/blob/main/LICENSE.txt">MIT License</a>.
 Thank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026
 K. A. Stevens, UC Davis.</p>`;
 
@@ -40,4 +40,4 @@ export var nullTraceErrorLst = [
   "Try again later. This site is free with NO available technical support. [#NullTrace]"
 ];
 
-export var unsupportedFeaturesStr = 'see <a target="_blank" href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/unsupported-features.md">UNSUPPORTED FEATURES</a>';
+export var unsupportedFeaturesStr = 'see <a target="_blank" href="https://github.com/kstevensgrp/ucd-codetrace/blob/main/unsupported-features.md">UNSUPPORTED FEATURES</a>';

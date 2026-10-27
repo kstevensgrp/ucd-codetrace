@@ -49,7 +49,7 @@ export abstract class AbstractBaseFrontend {
 
   isExecutingCode: boolean = false;
 
-  // P-Tutor: upstream kept a diff_match_patch log of every edit here
+  // CodeTrace: upstream kept a diff_match_patch log of every edit here
   // (deltaObj / curCode / dmp) and sent it with each execution. Removed.
 
   num414Tries = 0;
@@ -72,7 +72,7 @@ export abstract class AbstractBaseFrontend {
 
   };
 
-  // P-Tutor: upstream also mapped js/ts/java/ruby/c/cpp/py3anaconda to JSONP
+  // CodeTrace: upstream also mapped js/ts/java/ruby/c/cpp/py3anaconda to JSONP
   // endpoints on cokapi.com (plus two raw-IP backup servers). Only Python
   // runs here, on this server, so those are gone. opt-live.ts still reads
   // this map, hence the nulls.
@@ -86,7 +86,7 @@ export abstract class AbstractBaseFrontend {
   abstract handleUncaughtException(trace: any[]) : any; // called by executeCodeAndCreateViz
 
   constructor(params: any = {}) {
-    // P-Tutor: ask the server which Python it runs and label the UI with it,
+    // CodeTrace: ask the server which Python it runs and label the UI with it,
     // instead of upstream's hard-coded "Python 3.6".
     $.get('python_version.txt', (v) => {
       v = String(v).trim();
@@ -96,7 +96,7 @@ export abstract class AbstractBaseFrontend {
       }
     }, 'text');
 
-    // P-Tutor: upstream generated a persistent per-browser UUID
+    // CodeTrace: upstream generated a persistent per-browser UUID
     // (localStorage 'opt_uuid') for usage research. We don't track users.
     this.userUUID = undefined;
 
@@ -165,7 +165,7 @@ export abstract class AbstractBaseFrontend {
     $("#frontendErrorOutput").html(lines.map(htmlspecialchars).join('<br/>') +
                                    (ignoreLog ? '' : '<p/>(' + unsupportedFeaturesStr + ')'));
 
-    // P-Tutor: upstream also POSTed the error + code to error_log.py; removed.
+    // CodeTrace: upstream also POSTed the error + code to error_log.py; removed.
   }
 
   clearFrontendError() {
@@ -342,7 +342,7 @@ export abstract class AbstractBaseFrontend {
         frontendOptionsObj.disableHeapNesting = true; // never nest Java objects, seems like a good default
       }
 
-      // P-Tutor: upstream serialized per-keystroke edit deltas (deltaObj)
+      // CodeTrace: upstream serialized per-keystroke edit deltas (deltaObj)
       // into diffs_json here; keystroke capture is removed.
 
       // if we can find a matching cache entry, then use it!!!
@@ -420,7 +420,7 @@ export abstract class AbstractBaseFrontend {
   }
 
   setSurveyHTML() {
-    // P-Tutor: upstream's "short user survey" (a Google Form keyed by
+    // CodeTrace: upstream's "short user survey" (a Google Form keyed by
     // userUUID) is gone. Kept as a no-op because every page entry point
     // calls it; the #surveyPane div stays empty.
     $('#surveyPane').empty();
@@ -432,7 +432,7 @@ export abstract class AbstractBaseFrontend {
 //    Keep this tool free by making a <a style="font-size: 10pt; font-weight: bold;" href="http://pgbovine.net/support.htm" target="_blank">small donation</a> (PayPal, Patreon, credit/debit card)
 
 
-// (P-Tutor: archive of upstream survey wordings v8-v14 removed; see git history.)
+// (CodeTrace: archive of upstream survey wordings v8-v14 removed; see git history.)
 
 
 // misc utilities:

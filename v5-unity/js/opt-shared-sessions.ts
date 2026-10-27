@@ -4,7 +4,7 @@
 
 // Implements shared sessions (a.k.a. Codechella)
 
-// P-Tutor: shared sessions / live help chat (TogetherJS) are disabled.
+// CodeTrace: shared sessions / live help chat (TogetherJS) are disabled.
 // The TogetherJS library is no longer loaded and OptFrontendSharedSessions
 // exits its constructor early (see disableSharedSessions below), so none of
 // the help-queue polling, chat UI, or hub traffic in this file runs. The
@@ -18,7 +18,7 @@ declare var moment: any; // for TypeScript
 require('script-loader!./lib/mobile-detect.min.js'); // http://hgoebl.github.io/mobile-detect.js/ https://github.com/hgoebl/mobile-detect.js
 declare var MobileDetect: any; // for TypeScript
 
-// P-Tutor: the library is not loaded, so export an inert stub. Every
+// CodeTrace: the library is not loaded, so export an inert stub. Every
 // `TogetherJS.running` check in this file and its subclasses is then false.
 export var TogetherJS = (window as any).TogetherJS || {running: false};
 
@@ -326,7 +326,7 @@ export class OptFrontendSharedSessions extends OptFrontend {
   updateOutputSignalFromRemote = false;
   wantsPublicHelp = false;
   iMadeAPublicHelpRequest = false; // subtly different than wantsPublicHelp (see usage)
-  disableSharedSessions = true; // P-Tutor: live chat / shared sessions are off
+  disableSharedSessions = true; // CodeTrace: live chat / shared sessions are off
   isIdle = false;
   peopleIveKickedOut = []; // #savage
 
@@ -353,7 +353,7 @@ export class OptFrontendSharedSessions extends OptFrontend {
     this.Range = ace.require('ace/range').Range; // for Ace Range() objects
 
     if (this.disableSharedSessions) {
-      return; // P-Tutor: early exit, no TogetherJS / help queue / A-B test init
+      return; // CodeTrace: early exit, no TogetherJS / help queue / A-B test init
     }
 
     this.initTogetherJS();

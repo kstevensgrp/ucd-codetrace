@@ -33,7 +33,7 @@
 require('./lib/d3.v2.min.js');
 require('./lib/jquery-3.0.0.min.js');
 
-// P-Tutor: the real interpreter version, fetched from the server by
+// CodeTrace: the real interpreter version, fetched from the server by
 // AbstractBaseFrontend (opt-frontend-common.ts). Shown in #langDisplayDiv.
 export var pythonVersionString = '3';
 export function setPythonVersionString(v: string) { pythonVersionString = v; }
@@ -475,7 +475,7 @@ export class ExecutionVisualizer {
 
       // add an extra label to link back to the main site, so that viewers
       // on the embedded page know that they're seeing an OPT visualization
-      base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">P-Tutor</a></div>');
+      base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">CodeTrace</a></div>');
       base.find('#codeFooterDocs').hide(); // cut out extraneous docs
     } else {
     }

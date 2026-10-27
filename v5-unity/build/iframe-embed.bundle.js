@@ -579,7 +579,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 */
 __webpack_require__(11);
 __webpack_require__(0);
-// P-Tutor: the real interpreter version, fetched from the server by
+// CodeTrace: the real interpreter version, fetched from the server by
 // AbstractBaseFrontend (opt-frontend-common.ts). Shown in #langDisplayDiv.
 exports.pythonVersionString = '3';
 function setPythonVersionString(v) { exports.pythonVersionString = v; }
@@ -929,7 +929,7 @@ var ExecutionVisualizer = /** @class */ (function () {
             }
             // add an extra label to link back to the main site, so that viewers
             // on the embedded page know that they're seeing an OPT visualization
-            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">P-Tutor</a></div>');
+            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">CodeTrace</a></div>');
             base.find('#codeFooterDocs').hide(); // cut out extraneous docs
         }
         else {
@@ -4513,13 +4513,13 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAADwCAMAAADY
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.privacyAndEndingHTML = "\n\n<p style=\"margin-top: 30px;\"><b>About this site:</b> P-Tutor at UC Davis is a\nfree tool for UC Davis courses. It's offered as is, so please don't paste\nanything private into it, and when you use it on assignments, follow your\ncourse's academic integrity policy. Enjoy exploring how your code runs!</p>\n\n<p style=\"margin-top: 25px;\">P-Tutor is an independent fork of\n<a href=\"https://pythontutor.com\">Python Tutor</a>, the open-source project\ncreated by <a href=\"http://www.pgbovine.net/\">Philip Guo</a>, used under the\n<a href=\"https://github.com/kstevensgrp/ucd-ptutor/blob/main/LICENSE.txt\">MIT License</a>.\nThank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026\nK. A. Stevens, UC Davis.</p>";
+exports.privacyAndEndingHTML = "\n\n<p style=\"margin-top: 30px;\"><b>About this site:</b> CodeTrace at UC Davis is a\nfree tool for UC Davis courses. It's offered as is, so please don't paste\nanything private into it, and when you use it on assignments, follow your\ncourse's academic integrity policy. Enjoy exploring how your code runs!</p>\n\n<p style=\"margin-top: 25px;\">CodeTrace is an independent fork of\n<a href=\"https://pythontutor.com\">Python Tutor</a>, the open-source project\ncreated by <a href=\"http://www.pgbovine.net/\">Philip Guo</a>, used under the\n<a href=\"https://github.com/kstevensgrp/ucd-codetrace/blob/main/LICENSE.txt\">MIT License</a>.\nThank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026\nK. A. Stevens, UC Davis.</p>";
 exports.footerHtml = "\n\n<p>\n  <button id=\"genUrlBtn\" class=\"smallBtn\" type=\"button\">Generate permanent link</button> <input type=\"text\" id=\"urlOutput\" size=\"60\"/>\n</p>\n\n<div id=\"embedLinkDiv\">\n<p>\n  <button id=\"genEmbedBtn\" class=\"smallBtn\" type=\"button\">Generate embed code</button> <input type=\"text\" id=\"embedCodeOutput\" size=\"60\"/> (also supports https://)\n</p>\n</div>\n\n<p style=\"margin-top: 25px;\"><b>What it runs:</b> Python 3 (currently 3.12),\nwith the standard library modules students use most:\n<tt>__future__</tt>, abc, array, bisect, calendar, cmath, collections, copy,\ndatetime, decimal, doctest, fractions, functools, hashlib, heapq, io,\nitertools, json, locale, math, operator, pickle, pprint, random, re, string,\ntime, types, typing, unittest. Other imports and file access aren't available.</p>\n\n" + exports.privacyAndEndingHTML;
 exports.nullTraceErrorLst = [
     "Unknown error: The server is OVERLOADED or your code has UNSUPPORTED FEATURES.",
     "Try again later. This site is free with NO available technical support. [#NullTrace]"
 ];
-exports.unsupportedFeaturesStr = 'see <a target="_blank" href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/unsupported-features.md">UNSUPPORTED FEATURES</a>';
+exports.unsupportedFeaturesStr = 'see <a target="_blank" href="https://github.com/kstevensgrp/ucd-codetrace/blob/main/unsupported-features.md">UNSUPPORTED FEATURES</a>';
 
 
 /***/ }),
@@ -4604,7 +4604,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
         // inputted by user for raw_input / mouse_input events
         this.rawInputLst = [];
         this.isExecutingCode = false;
-        // P-Tutor: upstream kept a diff_match_patch log of every edit here
+        // CodeTrace: upstream kept a diff_match_patch log of every edit here
         // (deltaObj / curCode / dmp) and sent it with each execution. Removed.
         this.num414Tries = 0;
         // note that we use '2' and '3' instead of 'py2' and 'py3' due to legacy reasons
@@ -4623,7 +4623,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
             '2': 'web_exec_py2.py',
             '3': 'web_exec_py3.py',
         };
-        // P-Tutor: upstream also mapped js/ts/java/ruby/c/cpp/py3anaconda to JSONP
+        // CodeTrace: upstream also mapped js/ts/java/ruby/c/cpp/py3anaconda to JSONP
         // endpoints on cokapi.com (plus two raw-IP backup servers). Only Python
         // runs here, on this server, so those are gone. opt-live.ts still reads
         // this map, hence the nulls.
@@ -4631,7 +4631,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
             '2': null,
             '3': null,
         };
-        // P-Tutor: ask the server which Python it runs and label the UI with it,
+        // CodeTrace: ask the server which Python it runs and label the UI with it,
         // instead of upstream's hard-coded "Python 3.6".
         $.get('python_version.txt', function (v) {
             v = String(v).trim();
@@ -4640,7 +4640,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
                 $('#pythonVersionSelector option[value="3"]').text('Python ' + v);
             }
         }, 'text');
-        // P-Tutor: upstream generated a persistent per-browser UUID
+        // CodeTrace: upstream generated a persistent per-browser UUID
         // (localStorage 'opt_uuid') for usage research. We don't track users.
         this.userUUID = undefined;
         // register a generic AJAX error handler
@@ -4702,7 +4702,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
         if (ignoreLog === void 0) { ignoreLog = false; }
         $("#frontendErrorOutput").html(lines.map(pytutor_1.htmlspecialchars).join('<br/>') +
             (ignoreLog ? '' : '<p/>(' + footer_html_1.unsupportedFeaturesStr + ')'));
-        // P-Tutor: upstream also POSTed the error + code to error_log.py; removed.
+        // CodeTrace: upstream also POSTed the error + code to error_log.py; removed.
     };
     AbstractBaseFrontend.prototype.clearFrontendError = function () {
         $("#frontendErrorOutput").html('');
@@ -4856,7 +4856,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
             // TODO: should we still keep this exceptional case?
             frontendOptionsObj.disableHeapNesting = true; // never nest Java objects, seems like a good default
         }
-        // P-Tutor: upstream serialized per-keystroke edit deltas (deltaObj)
+        // CodeTrace: upstream serialized per-keystroke edit deltas (deltaObj)
         // into diffs_json here; keystroke capture is removed.
         // if we can find a matching cache entry, then use it!!!
         if (this.traceCache) {
@@ -4921,7 +4921,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
         this.traceCache = [];
     };
     AbstractBaseFrontend.prototype.setSurveyHTML = function () {
-        // P-Tutor: upstream's "short user survey" (a Google Form keyed by
+        // CodeTrace: upstream's "short user survey" (a Google Form keyed by
         // userUUID) is gone. Kept as a no-op because every page entry point
         // calls it; the #surveyPane div stays empty.
         $('#surveyPane').empty();
@@ -4931,7 +4931,7 @@ var AbstractBaseFrontend = /** @class */ (function () {
 exports.AbstractBaseFrontend = AbstractBaseFrontend;
 // removed donation link on 2019-03-26
 //    Keep this tool free by making a <a style="font-size: 10pt; font-weight: bold;" href="http://pgbovine.net/support.htm" target="_blank">small donation</a> (PayPal, Patreon, credit/debit card)
-// (P-Tutor: archive of upstream survey wordings v8-v14 removed; see git history.)
+// (CodeTrace: archive of upstream survey wordings v8-v14 removed; see git history.)
 // misc utilities:
 // From http://stackoverflow.com/a/8809472
 function generateUUID() {
@@ -23276,7 +23276,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "/* CSS accompanying ../visualize.html */\n\nh1 {\n  font-weight: normal;\n  font-size: 20pt;\n  font-family: georgia, serif;\n  line-height: 1em;  /* enforce single spacing so that Georgia works */\n\n  margin-top: 0px;\n  margin-bottom: 8px;\n}\n\nh2 {\n  font-size: 12pt;\n  font-weight: normal;\n  font-family: georgia, serif;\n  line-height: 1.1em; /* enforce single spacing so that Georgia works */\n\n  margin-top: 2px;\n  margin-bottom: 20px;\n}\n\n\nbody {\n  background-color: white;\n  font-family: verdana, arial, helvetica, sans-serif;\n  font-size: 10pt;\n}\n\na,\na:visited,\na:hover {\n  color: #022851;\n}\n\nspan {\n  padding: 0px;\n}\n\n#optionsPane {\n  margin-top: 15px;\n  margin-bottom: 20px;\n  line-height: 150%;\n}\n\ntable#pyOutputPane {\n  padding: 10px;\n}\n\n#pyInputPane, #loadingPane {\n  margin-top: 10px;\n  margin-bottom: 20px;\n\n  max-width: 700px;\n  /* center align */\n  margin-left: auto;\n  margin-right: auto;\n}\n\n#loadingPane {\n  margin-bottom: 5px;\n}\n\n#codeInputPane {\n  margin-top: 5px;\n  font-size: 12pt;\n  border: 1px solid #ddd;\n}\n\n#codeInputWarnings {\n  margin-bottom: 8px;\n}\n\nbutton.smallBtn {\n  font-size: 10pt;\n  padding: 3px;\n}\n\nbutton.bigBtn {\n  font-size: 12pt;\n  padding: 6px;\n  margin-top: 0px;\n}\n\nbutton.surveyBtn {\n  font-size: 8pt;\n  margin-top: 8px;\n}\n\nbutton.surveyBtnBig {\n  font-size: 11pt;\n  padding: 5px;\n  margin-top: 0px;\n}\n\n#footer {\n  color: #999;\n  font-size: 9pt;\n  border-top: 1px solid #bbbbbb;\n  padding-top: 5px;\n  margin-top: 5px;\n\n  max-width: 700px;\n  /* center align */\n  margin-left: auto;\n  margin-right: auto;\n}\n\n#frontendErrorOutput {\n  color: #e93f34; /* should match brightRed JavaScript variable */\n  font-size: 12pt;\n  line-height: 1.5em;\n  margin-top: 8px;\n}\n\n.togetherjsBtn {\n  /*color: #b80000;*/\n  color: #e93f34;\n  font-size: 9pt;\n  padding: 4px;\n  margin-top: 3px;\n}\n\n/* make this a fixed size with scrollbars for overflow so that the UI doesn't jitter up and down */\n#publicHelpQueue {\n  overflow: auto;\n  height: 95px;\n  margin-bottom: 15px;\n  margin-left: 10px;\n}\n\n.helpQueueSmallText {\n  color: #777;\n  font-size: 8pt;\n}\n\n.redBold {\n  font-weight: bold;\n  color: #e93f34;\n}\n\n#stopRequestHelpBtn {\n  font-size: 9pt;\n  padding: 2px;\n}\n\n#moderationPanel {\n  font-size: 11pt;\n  margin-bottom: 5pt;\n  min-height: 16pt; /* just so things don't jiggle around vertically too much */\n  padding-top: 6px;\n  padding-bottom: 6px;\n  padding-left: 6px;\n  padding-right: 6px;\n  border: 1px solid #e93f34;\n}\n\n.kickLink {\n  font-size: 10pt;\n  margin-right: 4px;\n}\n\n\n#syncBtn {\n font-size: 8pt;\n margin-left: 0px;\n}\n\n/* P-Tutor branding lives in css/ptutor.css (linked from the HTML, not bundled). */\n\n#surveyHeader {\n  margin-left: 100px;\n}\n\n.surveyQ {\n  font-size: 9pt;\n  padding: 2px;\n}\n\n/* necessary for CodeMirror error line highlighting to work! */\n.CodeMirror .errorLine { background: #ffff3f !important; }\n\n\n/* from http://rog.ie/blog/css-star-rater */\n.star-rating {\n  font-size: 0;\n  white-space: nowrap;\n  display: inline-block;\n  /* pgbovine - scale this appropriately with a 5:1 ratio */\n  width: 100px;\n  height: 20px;\n  overflow: hidden;\n  position: relative;\n  background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');\n  background-size: contain;\n}\n.star-rating i {\n  opacity: 0;\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 100%;\n  width: 20%;\n  z-index: 1;\n  background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');\n  background-size: contain;\n}\n.star-rating input {\n  -moz-appearance: none;\n  -webkit-appearance: none;\n  opacity: 0;\n  display: inline-block;\n  width: 20%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: 2;\n  position: relative;\n}\n.star-rating input:hover + i,\n.star-rating input:checked + i {\n  opacity: 1;\n}\n.star-rating i ~ i {\n  width: 40%;\n}\n.star-rating i ~ i ~ i {\n  width: 60%;\n}\n.star-rating i ~ i ~ i ~ i {\n  width: 80%;\n}\n.star-rating i ~ i ~ i ~ i ~ i {\n  width: 100%;\n}\n\n\n#syntaxErrBubbleContents {\n  font-size: 9.5pt;\n  cursor: default;\n}\n\n#syntaxErrHeader {\n  margin-bottom: 3pt;\n}\n\n#syntaxErrCodeDisplay {\n  border: 1px solid #ddd;\n}\n\n#syntaxErrMsg {\n  color: #e93f34; /* should match brightRed JavaScript variable */\n  font-size: 10pt;\n  margin-top: 3pt;\n  margin-bottom: 2pt;\n}\n\n#syntaxErrQuestion {\n  margin-top: 12px;\n}\n\n#syntaxErrTxtInput {\n  margin-top: 3px;\n  margin-bottom: 6px;\n  padding: 2px;\n}\n\n#syntaxErrSubmitBtn, #syntaxErrCloseBtn {\n  margin-right: 8px;\n}\n\n#syntaxErrHideAllLink {\n  font-size: 8pt;\n}\n\n#testCasesPane {\n margin-top: 5px;\n margin-bottom: 25px;\n}\n\n#exampleSnippets {\n border-top: 1px solid #ccc;\n margin-top: 15px;\n}\n\n#showExampleLink {\n  margin-top: 15px;\n}\n\n#instructionsPane {\n margin-bottom: 10px;\n}\n\n/* for SyntaxErrorSurveyBubble */\n\ntextarea.bubbleInputText {\n  font-family: verdana, arial, helvetica, sans-serif;\n\tfont-size: 9pt;\n\tline-height: 1.3em;\n}\n\n.qtip-content {\n\tcolor: #333;\n\tbackground-color: #ffffff;\n\n\tmax-width: 390px;\n\twidth: 390px;\n\n\tborder: 2px solid #e93f34;\n\n  cursor: pointer;\n\n\t*border-right-width: 2px;\n\t*border-bottom-width: 2px;\n\n\t-webkit-border-radius: 5px;\n\t-moz-border-radius: 5px;\n\tborder-radius: 5px;\n\n\t-webkit-box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);\n\t-moz-box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);\n\tbox-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);\n\n\t-webkit-background-clip: padding-box;\n\t-moz-background-clip: padding;\n\tbackground-clip: padding-box;\n}\n", ""]);
+exports.push([module.i, "/* CSS accompanying ../visualize.html */\n\nh1 {\n  font-weight: normal;\n  font-size: 20pt;\n  font-family: georgia, serif;\n  line-height: 1em;  /* enforce single spacing so that Georgia works */\n\n  margin-top: 0px;\n  margin-bottom: 8px;\n}\n\nh2 {\n  font-size: 12pt;\n  font-weight: normal;\n  font-family: georgia, serif;\n  line-height: 1.1em; /* enforce single spacing so that Georgia works */\n\n  margin-top: 2px;\n  margin-bottom: 20px;\n}\n\n\nbody {\n  background-color: white;\n  font-family: verdana, arial, helvetica, sans-serif;\n  font-size: 10pt;\n}\n\na,\na:visited,\na:hover {\n  color: #022851;\n}\n\nspan {\n  padding: 0px;\n}\n\n#optionsPane {\n  margin-top: 15px;\n  margin-bottom: 20px;\n  line-height: 150%;\n}\n\ntable#pyOutputPane {\n  padding: 10px;\n}\n\n#pyInputPane, #loadingPane {\n  margin-top: 10px;\n  margin-bottom: 20px;\n\n  max-width: 700px;\n  /* center align */\n  margin-left: auto;\n  margin-right: auto;\n}\n\n#loadingPane {\n  margin-bottom: 5px;\n}\n\n#codeInputPane {\n  margin-top: 5px;\n  font-size: 12pt;\n  border: 1px solid #ddd;\n}\n\n#codeInputWarnings {\n  margin-bottom: 8px;\n}\n\nbutton.smallBtn {\n  font-size: 10pt;\n  padding: 3px;\n}\n\nbutton.bigBtn {\n  font-size: 12pt;\n  padding: 6px;\n  margin-top: 0px;\n}\n\nbutton.surveyBtn {\n  font-size: 8pt;\n  margin-top: 8px;\n}\n\nbutton.surveyBtnBig {\n  font-size: 11pt;\n  padding: 5px;\n  margin-top: 0px;\n}\n\n#footer {\n  color: #999;\n  font-size: 9pt;\n  border-top: 1px solid #bbbbbb;\n  padding-top: 5px;\n  margin-top: 5px;\n\n  max-width: 700px;\n  /* center align */\n  margin-left: auto;\n  margin-right: auto;\n}\n\n#frontendErrorOutput {\n  color: #e93f34; /* should match brightRed JavaScript variable */\n  font-size: 12pt;\n  line-height: 1.5em;\n  margin-top: 8px;\n}\n\n.togetherjsBtn {\n  /*color: #b80000;*/\n  color: #e93f34;\n  font-size: 9pt;\n  padding: 4px;\n  margin-top: 3px;\n}\n\n/* make this a fixed size with scrollbars for overflow so that the UI doesn't jitter up and down */\n#publicHelpQueue {\n  overflow: auto;\n  height: 95px;\n  margin-bottom: 15px;\n  margin-left: 10px;\n}\n\n.helpQueueSmallText {\n  color: #777;\n  font-size: 8pt;\n}\n\n.redBold {\n  font-weight: bold;\n  color: #e93f34;\n}\n\n#stopRequestHelpBtn {\n  font-size: 9pt;\n  padding: 2px;\n}\n\n#moderationPanel {\n  font-size: 11pt;\n  margin-bottom: 5pt;\n  min-height: 16pt; /* just so things don't jiggle around vertically too much */\n  padding-top: 6px;\n  padding-bottom: 6px;\n  padding-left: 6px;\n  padding-right: 6px;\n  border: 1px solid #e93f34;\n}\n\n.kickLink {\n  font-size: 10pt;\n  margin-right: 4px;\n}\n\n\n#syncBtn {\n font-size: 8pt;\n margin-left: 0px;\n}\n\n/* CodeTrace branding lives in css/codetrace.css (linked from the HTML, not bundled). */\n\n#surveyHeader {\n  margin-left: 100px;\n}\n\n.surveyQ {\n  font-size: 9pt;\n  padding: 2px;\n}\n\n/* necessary for CodeMirror error line highlighting to work! */\n.CodeMirror .errorLine { background: #ffff3f !important; }\n\n\n/* from http://rog.ie/blog/css-star-rater */\n.star-rating {\n  font-size: 0;\n  white-space: nowrap;\n  display: inline-block;\n  /* pgbovine - scale this appropriately with a 5:1 ratio */\n  width: 100px;\n  height: 20px;\n  overflow: hidden;\n  position: relative;\n  background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');\n  background-size: contain;\n}\n.star-rating i {\n  opacity: 0;\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 100%;\n  width: 20%;\n  z-index: 1;\n  background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');\n  background-size: contain;\n}\n.star-rating input {\n  -moz-appearance: none;\n  -webkit-appearance: none;\n  opacity: 0;\n  display: inline-block;\n  width: 20%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: 2;\n  position: relative;\n}\n.star-rating input:hover + i,\n.star-rating input:checked + i {\n  opacity: 1;\n}\n.star-rating i ~ i {\n  width: 40%;\n}\n.star-rating i ~ i ~ i {\n  width: 60%;\n}\n.star-rating i ~ i ~ i ~ i {\n  width: 80%;\n}\n.star-rating i ~ i ~ i ~ i ~ i {\n  width: 100%;\n}\n\n\n#syntaxErrBubbleContents {\n  font-size: 9.5pt;\n  cursor: default;\n}\n\n#syntaxErrHeader {\n  margin-bottom: 3pt;\n}\n\n#syntaxErrCodeDisplay {\n  border: 1px solid #ddd;\n}\n\n#syntaxErrMsg {\n  color: #e93f34; /* should match brightRed JavaScript variable */\n  font-size: 10pt;\n  margin-top: 3pt;\n  margin-bottom: 2pt;\n}\n\n#syntaxErrQuestion {\n  margin-top: 12px;\n}\n\n#syntaxErrTxtInput {\n  margin-top: 3px;\n  margin-bottom: 6px;\n  padding: 2px;\n}\n\n#syntaxErrSubmitBtn, #syntaxErrCloseBtn {\n  margin-right: 8px;\n}\n\n#syntaxErrHideAllLink {\n  font-size: 8pt;\n}\n\n#testCasesPane {\n margin-top: 5px;\n margin-bottom: 25px;\n}\n\n#exampleSnippets {\n border-top: 1px solid #ccc;\n margin-top: 15px;\n}\n\n#showExampleLink {\n  margin-top: 15px;\n}\n\n#instructionsPane {\n margin-bottom: 10px;\n}\n\n/* for SyntaxErrorSurveyBubble */\n\ntextarea.bubbleInputText {\n  font-family: verdana, arial, helvetica, sans-serif;\n\tfont-size: 9pt;\n\tline-height: 1.3em;\n}\n\n.qtip-content {\n\tcolor: #333;\n\tbackground-color: #ffffff;\n\n\tmax-width: 390px;\n\twidth: 390px;\n\n\tborder: 2px solid #e93f34;\n\n  cursor: pointer;\n\n\t*border-right-width: 2px;\n\t*border-bottom-width: 2px;\n\n\t-webkit-border-radius: 5px;\n\t-moz-border-radius: 5px;\n\tborder-radius: 5px;\n\n\t-webkit-box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);\n\t-moz-box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);\n\tbox-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);\n\n\t-webkit-background-clip: padding-box;\n\t-moz-background-clip: padding;\n\tbackground-clip: padding-box;\n}\n", ""]);
 
 // exports
 

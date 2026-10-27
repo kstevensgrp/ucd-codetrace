@@ -67,9 +67,9 @@ export class OptFrontend extends AbstractBaseFrontend {
   pyInputAceEditor = undefined; // Ace editor object that contains the user's code
 
   // some subclasses use these, so put them in the superclass
-  activateSyntaxErrorSurvey: boolean = false;  // P-Tutor: error-cause survey bubbles (posted to *_survey.py) are off
+  activateSyntaxErrorSurvey: boolean = false;  // CodeTrace: error-cause survey bubbles (posted to *_survey.py) are off
   activateRuntimeErrorSurvey: boolean = false;
-  activateEurekaSurvey: boolean = false; // P-Tutor: eureka survey removed (surveys.ts deleted)
+  activateEurekaSurvey: boolean = false; // CodeTrace: eureka survey removed (surveys.ts deleted)
 
   demoMode: boolean = false; // if true, then we're giving a live demo, so hide a bunch of excess stuff on page
   codcastFile: string; // name of a codcast demo file to try to load
@@ -87,7 +87,7 @@ export class OptFrontend extends AbstractBaseFrontend {
       (myArgs as any).codeDivWidth = ExecutionVisualizer.DEFAULT_EMBEDDED_CODE_DIV_WIDTH;
       (myArgs as any).codeDivHeight = ExecutionVisualizer.DEFAULT_EMBEDDED_CODE_DIV_HEIGHT;
 
-      var domain = window.location.origin + "/"; // P-Tutor: whatever host serves this page
+      var domain = window.location.origin + "/"; // CodeTrace: whatever host serves this page
       var embedUrlStr = $.param.fragment(domain + "iframe-embed.html", myArgs, 2 /* clobber all */);
       embedUrlStr = sanitizeURL(embedUrlStr);
       var iframeStr = '<iframe width="800" height="500" frameborder="0" src="' + embedUrlStr + '"> </iframe>';
@@ -148,7 +148,7 @@ export class OptFrontend extends AbstractBaseFrontend {
       });
     }
 
-    // P-Tutor: upstream submitted the step-navigation history (viz_interaction.py)
+    // CodeTrace: upstream submitted the step-navigation history (viz_interaction.py)
     // on unload, on edit, and every minute. Removed.
 
     this.parseQueryString(); // do this at the end after Ace editor initialized
@@ -401,10 +401,10 @@ export class OptFrontend extends AbstractBaseFrontend {
   }
 
   ignoreAjaxError(settings) {
-    return false; // P-Tutor: no logging/survey endpoints left to ignore
+    return false; // CodeTrace: no logging/survey endpoints left to ignore
   }
 
-  // P-Tutor: initDeltaObj()/snapshotCodeDiff() (per-keystroke diff capture) removed.
+  // CodeTrace: initDeltaObj()/snapshotCodeDiff() (per-keystroke diff capture) removed.
   snapshotCodeDiff() { }
 
   logEditDelta(delta) {

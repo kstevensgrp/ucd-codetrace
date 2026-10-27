@@ -649,7 +649,7 @@ export class OptFrontendWithTestcases extends OptFrontendSharedSessions {
 
 $(document).ready(function() {
   // initialize all HTML elements before creating optFrontend object
-  // P-Tutor: Python examples only (upstream also appended the course list
+  // CodeTrace: Python examples only (upstream also appended the course list
   // and Java/JS/TS/Ruby/C/C++ examples, with an optOverride branch for the
   // per-language pages).
   $("#exampleSnippets").append(pythonExamplesHtml);
@@ -680,7 +680,7 @@ $(document).ready(function() {
     var myId = $(this).attr('id');
     var exFile;
     var lang;
-    // P-Tutor: Python examples only
+    // CodeTrace: Python examples only
     if (PY2_EXAMPLES[myId] !== undefined) {
       exFile = PY2_EXAMPLES[myId];
       if ($('#pythonVersionSelector').val() === '3') {

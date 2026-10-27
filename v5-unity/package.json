@@ -1,9 +1,9 @@
 {
-  "name": "ucd-ptutor",
+  "name": "ucd-codetrace",
   "version": "1.0.0",
-  "description": "P-Tutor at UC Davis (fork of Python Tutor v5-unity)",
+  "description": "CodeTrace at UC Davis (fork of Python Tutor v5-unity)",
   "private": true,
-  "repository": "https://github.com/kstevensgrp/ucd-ptutor",
+  "repository": "https://github.com/kstevensgrp/ucd-codetrace",
   "license": "MIT",
   "scripts": {
     "start": "python3 bottle_server.py",

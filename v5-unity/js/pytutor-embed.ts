@@ -27,7 +27,7 @@ function addVisualizerToPage(trace, divId, params) {
     params.embeddedMode = true;
   }
   if (params.editCodeBaseURL === undefined) {
-    params.editCodeBaseURL = window.location.origin + '/visualize.html'; // P-Tutor
+    params.editCodeBaseURL = window.location.origin + '/visualize.html'; // CodeTrace
   }
 
   // When some div in your webpage (such as a visualizer div) expands in height,

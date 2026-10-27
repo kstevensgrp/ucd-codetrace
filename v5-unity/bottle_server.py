@@ -21,14 +21,14 @@ import pg_logger
 
 
 # Non-Python languages first hit these as a logging-only dummy before the
-# real JSONP call to the cokapi backend. (P-Tutor: the telemetry routes
+# real JSONP call to the cokapi backend. (CodeTrace: the telemetry routes
 # viz_interaction.py / error_log.py / *_survey.py are gone; nothing calls them.)
 @route('/web_exec_<name:re:.+>.py')
 @route('/LIVE_exec_<name:re:.+>.py')
 def dummy_ok(name=None):
     return 'OK'
 
-# P-Tutor: the frontend labels the UI with the interpreter actually running
+# CodeTrace: the frontend labels the UI with the interpreter actually running
 @route('/python_version.txt')
 def python_version():
     import platform
@@ -36,7 +36,7 @@ def python_version():
     response.content_type = 'text/plain'
     return '.'.join(platform.python_version_tuple()[:2])  # e.g. '3.12'
 
-# P-Tutor: the bare hostname lands on the visualizer (index.html is a
+# CodeTrace: the bare hostname lands on the visualizer (index.html is a
 # symlink to visualize.html for static hosts; this covers "/")
 @route('/')
 def root():

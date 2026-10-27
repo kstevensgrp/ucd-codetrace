@@ -1,6 +1,6 @@
 # Unsupported features
 
-P-Tutor runs your program inside a tracer that records every step so it can
+CodeTrace runs your program inside a tracer that records every step so it can
 be replayed, so it deliberately supports less than a normal Python
 interpreter. If something below bites you, the usual fix is to simplify the
 program: the tool is for understanding how code runs, not for running

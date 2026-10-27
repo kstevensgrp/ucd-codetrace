@@ -1,0 +1,24 @@
+/* CodeTrace at UC Davis — branding styles.
+   Linked directly from the HTML pages (not bundled by webpack), so edits
+   here show on reload without a rebuild.
+   Aggie Blue #022851, Aggie Gold #FFBF00. */
+
+#ctMasthead {
+  max-width: 700px;
+  margin: 18px auto 6px auto;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #022851;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+#ctMasthead a { line-height: 0; }
+#ctMasthead .ctWordmark { height: 30px; display: block; }
+#ctMasthead .ctLive {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13pt;
+  color: #022851;
+  margin-left: 10px;
+  align-self: center;
+}
+#ctMasthead .ctCampus { height: 22px; display: block; }

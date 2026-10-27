@@ -579,7 +579,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 */
 __webpack_require__(11);
 __webpack_require__(0);
-// P-Tutor: the real interpreter version, fetched from the server by
+// CodeTrace: the real interpreter version, fetched from the server by
 // AbstractBaseFrontend (opt-frontend-common.ts). Shown in #langDisplayDiv.
 exports.pythonVersionString = '3';
 function setPythonVersionString(v) { exports.pythonVersionString = v; }
@@ -929,7 +929,7 @@ var ExecutionVisualizer = /** @class */ (function () {
             }
             // add an extra label to link back to the main site, so that viewers
             // on the embedded page know that they're seeing an OPT visualization
-            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">P-Tutor</a></div>');
+            base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">CodeTrace</a></div>');
             base.find('#codeFooterDocs').hide(); // cut out extraneous docs
         }
         else {
@@ -4513,13 +4513,13 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAADwCAMAAADY
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.privacyAndEndingHTML = "\n\n<p style=\"margin-top: 30px;\"><b>About this site:</b> P-Tutor at UC Davis is a\nfree tool for UC Davis courses. It's offered as is, so please don't paste\nanything private into it, and when you use it on assignments, follow your\ncourse's academic integrity policy. Enjoy exploring how your code runs!</p>\n\n<p style=\"margin-top: 25px;\">P-Tutor is an independent fork of\n<a href=\"https://pythontutor.com\">Python Tutor</a>, the open-source project\ncreated by <a href=\"http://www.pgbovine.net/\">Philip Guo</a>, used under the\n<a href=\"https://github.com/kstevensgrp/ucd-ptutor/blob/main/LICENSE.txt\">MIT License</a>.\nThank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026\nK. A. Stevens, UC Davis.</p>";
+exports.privacyAndEndingHTML = "\n\n<p style=\"margin-top: 30px;\"><b>About this site:</b> CodeTrace at UC Davis is a\nfree tool for UC Davis courses. It's offered as is, so please don't paste\nanything private into it, and when you use it on assignments, follow your\ncourse's academic integrity policy. Enjoy exploring how your code runs!</p>\n\n<p style=\"margin-top: 25px;\">CodeTrace is an independent fork of\n<a href=\"https://pythontutor.com\">Python Tutor</a>, the open-source project\ncreated by <a href=\"http://www.pgbovine.net/\">Philip Guo</a>, used under the\n<a href=\"https://github.com/kstevensgrp/ucd-codetrace/blob/main/LICENSE.txt\">MIT License</a>.\nThank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026\nK. A. Stevens, UC Davis.</p>";
 exports.footerHtml = "\n\n<p>\n  <button id=\"genUrlBtn\" class=\"smallBtn\" type=\"button\">Generate permanent link</button> <input type=\"text\" id=\"urlOutput\" size=\"60\"/>\n</p>\n\n<div id=\"embedLinkDiv\">\n<p>\n  <button id=\"genEmbedBtn\" class=\"smallBtn\" type=\"button\">Generate embed code</button> <input type=\"text\" id=\"embedCodeOutput\" size=\"60\"/> (also supports https://)\n</p>\n</div>\n\n<p style=\"margin-top: 25px;\"><b>What it runs:</b> Python 3 (currently 3.12),\nwith the standard library modules students use most:\n<tt>__future__</tt>, abc, array, bisect, calendar, cmath, collections, copy,\ndatetime, decimal, doctest, fractions, functools, hashlib, heapq, io,\nitertools, json, locale, math, operator, pickle, pprint, random, re, string,\ntime, types, typing, unittest. Other imports and file access aren't available.</p>\n\n" + exports.privacyAndEndingHTML;
 exports.nullTraceErrorLst = [
     "Unknown error: The server is OVERLOADED or your code has UNSUPPORTED FEATURES.",
     "Try again later. This site is free with NO available technical support. [#NullTrace]"
 ];
-exports.unsupportedFeaturesStr = 'see <a target="_blank" href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/unsupported-features.md">UNSUPPORTED FEATURES</a>';
+exports.unsupportedFeaturesStr = 'see <a target="_blank" href="https://github.com/kstevensgrp/ucd-codetrace/blob/main/unsupported-features.md">UNSUPPORTED FEATURES</a>';
 
 
 /***/ }),

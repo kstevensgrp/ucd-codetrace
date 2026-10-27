@@ -1,4 +1,4 @@
-// P-Tutor: upstream's exampleHeaderHtml (list of edX/Coursera/Udacity courses) removed.
+// CodeTrace: upstream's exampleHeaderHtml (list of edX/Coursera/Udacity courses) removed.
 
 export var pythonExamplesHtml = `<p style="margin-top: 25px; font-weight: bold;">Python Examples</p>
 
@@ -134,4 +134,4 @@ export var PY3_EXAMPLES = {
   nonlocalLink: "nonlocal.txt",
 };
 
-// P-Tutor: Java/JS/TS/Ruby/C/C++ example lists removed (Python only).
+// CodeTrace: Java/JS/TS/Ruby/C/C++ example lists removed (Python only).

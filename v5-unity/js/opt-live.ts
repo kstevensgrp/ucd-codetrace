@@ -523,7 +523,7 @@ export class OptLiveFrontend extends OptFrontend {
         console.log("Converted all tabs to spaces");
       }
 
-      // P-Tutor: upstream re-ran the program 500 ms after every keystroke,
+      // CodeTrace: upstream re-ran the program 500 ms after every keystroke,
       // which flashes a SyntaxError on every half-typed line. Re-run
       // promptly when the change contains a newline (Enter, or a
       // multi-line paste or delete), and otherwise only after a 2 s pause
@@ -630,7 +630,7 @@ export class OptLiveFrontend extends OptFrontend {
       assert(false);
     }
 
-    // P-Tutor: upstream sent the previous visualizer's step history here; removed.
+    // CodeTrace: upstream sent the previous visualizer's step history here; removed.
 
     if (jsonp_endpoint) {
       assert (pyState !== '2' && pyState !== '3');

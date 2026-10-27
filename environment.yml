@@ -1,10 +1,10 @@
-# Local development environment for P-Tutor at UC Davis.
+# Local development environment for CodeTrace at UC Davis.
 #   conda env create -f environment.yml
-#   conda activate ptutor
+#   conda activate codetrace
 #   cd v5-unity && python bottle_server.py
 # Python is pinned to the version student code will run under on the server;
 # change it here (and in requirements.txt / the Dockerfile) deliberately.
-name: ptutor
+name: codetrace
 channels:
   - conda-forge
 dependencies:
