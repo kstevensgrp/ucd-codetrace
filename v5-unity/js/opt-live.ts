@@ -523,8 +523,16 @@ export class OptLiveFrontend extends OptFrontend {
         console.log("Converted all tabs to spaces");
       }
 
+      // P-Tutor: upstream re-ran the program 500 ms after every keystroke,
+      // which flashes a SyntaxError on every half-typed line. Re-run
+      // promptly when the change contains a newline (Enter, or a
+      // multi-line paste or delete), and otherwise only after a 2 s pause
+      // in typing, so in-place edits still get picked up.
+      var changeHasNewline = !!(e && e.lines && e.lines.length > 1);
+      var delayMs = (changeHasNewline || this.preseededCurInstr) ? 100 : 2000;
+
       $.doTimeout('pyInputAceEditorChange',
-                  500, /* go a bit faster than CODE_SNAPSHOT_DEBOUNCE_MS to feel more snappy */
+                  delayMs,
                   () => {
                     if (this.preseededCurInstr) {
                       this.executeCode(this.preseededCurInstr);

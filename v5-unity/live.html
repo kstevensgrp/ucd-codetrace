@@ -16,7 +16,7 @@
   <!-- let Webpack take care of everything. Use the [hash] feature to
        create unique filenames for releases:
        https://webpack.github.io/docs/long-term-caching.html -->
-  <script type="text/javascript" src="build/opt-live.bundle.js?07d981d5dd" charset="utf-8"></script>
+  <script type="text/javascript" src="build/opt-live.bundle.js?7d47f6d77c" charset="utf-8"></script>
 
 
   <link rel="stylesheet" href="css/ptutor.css"/>
@@ -25,21 +25,8 @@
 
 <body>
 
-  <div id="liveModeHeader">
-  Live Programming Mode re-runs your code as you type. Use the <a href="visualize.html">regular visualizer</a> for the full set of features.
 
-  <span id="surveyPane"></span>
-
-  <!-- taken down on 2016-12-06
-  <p>Help us improve this live programming mode by filling out this <a
-  target="_blank"
-  href="https://docs.google.com/forms/d/1XT-rPaWxDRNOPAfBxIqzCXs7nYGUgOjNofmUnuQZYV8/viewform">two-question
-  survey</a>.</p>
-  -->
-
-  </div>
-
-<div id="ptutorMasthead"><a href="visualize.html">P-Tutor</a><span class="ptutorAt"> @ </span><span class="ptutorCampus">UC Davis</span></div>
+<div id="ptutorMasthead"><a href="visualize.html">P-Tutor</a> Live<span class="ptutorAt"> @ </span><span class="ptutorCampus">UC Davis</span></div>
 
   <table>
     <tr>
@@ -47,9 +34,7 @@
         <div id="pyInputPane">
           <div id="codeInputWarnings">Write code in
             <select id="pythonVersionSelector">
-              <option value="2">Python 2.7</option>
-              <option value="3" selected>Python 3.6</option>
-              <option value="js">JavaScript ES6</option>
+              <option value="3" selected>Python 3</option>
             </select>
 
             <span id="liveModeExtraWarning" style="color: #888; font-size: 8pt; float: right;">(drag lower right corner to resize code editor)</span>
@@ -58,6 +43,10 @@
 
           <div id="codeInputPane"></div>
           <div id="legendDiv"></div>
+          <div id="liveModeHeader">
+            Live Programming Mode re-runs your code when you press Enter or pause typing.
+            Use the <a href="visualize.html">regular visualizer</a> for the full set of features.
+          </div>
           <div id="executionSlider" style="margin-top: 10px;"></div>
 
           <!-- copied and pasted from pytutor.js
@@ -107,20 +96,9 @@
 </div>
 
 <p>
-  <button id="genUrlBtn" class="smallBtn" type="button">Generate permanent link</button> <input type="text" id="urlOutput" size="65"/> (<a href="https://www.youtube.com/watch?v=h4q3UKdEFKE" target="_blank">video demo</a>)
+  <button id="genUrlBtn" class="smallBtn" type="button">Generate permanent link</button> <input type="text" id="urlOutput" size="65"/>
 </p>
 
-<p style="margin-top: 35px;">
-This live programming mode of
-<a href="http://pythontutor.com/">Python Tutor</a> (<a href="https://github.com/pgbovine/OnlinePythonTutor">code on GitHub</a>) supports three
-languages: Python <a href="https://docs.python.org/2.7/">2.7</a> and <a
-href="https://docs.python.org/3.6/">3.6</a> with limited module
-imports, and
-JavaScript running in Node.js v6.0.0 with limited support for ES6.
-
-Try the regular
-<a href="http://pythontutor.com/visualize.html">Python Tutor</a>
-visualizer for additional language support.</p>
 
 </div>
 

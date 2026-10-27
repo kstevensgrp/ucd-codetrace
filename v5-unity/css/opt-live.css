@@ -72,11 +72,10 @@ button.surveyBtnBig {
 }
 
 #liveModeHeader {
-  margin-left: 3px;
-  margin-bottom: 12px;
   margin-top: 10px;
+  margin-bottom: 12px;
+  text-align: left;
   color: #888;
-  /*width: 600px;*/
 }
 
 /* copied from pytutor.css */
