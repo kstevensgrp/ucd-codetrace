@@ -10,21 +10,23 @@
 <!-- OPT live programming prototype started on 2016-05-30 -->
 
 <head>
-  <title>Live Programming Mode - Python Tutor - Visualize Python and JavaScript code</title>
+  <title>Live Programming Mode - P-Tutor at UC Davis</title>
   <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
 
   <!-- let Webpack take care of everything. Use the [hash] feature to
        create unique filenames for releases:
        https://webpack.github.io/docs/long-term-caching.html -->
-  <script type="text/javascript" src="build/opt-live.bundle.js?56e5e49cee" charset="utf-8"></script>
+  <script type="text/javascript" src="build/opt-live.bundle.js?07d981d5dd" charset="utf-8"></script>
 
 
+  <link rel="stylesheet" href="css/ptutor.css"/>
+  <link rel="icon" href="favicon.ico"/>
 </head>
 
 <body>
 
   <div id="liveModeHeader">
-  This mode is experimental. Use the <a href="visualize.html" target="_blank">regular Python Tutor</a> to <span style="font-weight: bold;">get live help</span> and use more features.
+  Live Programming Mode re-runs your code as you type. Use the <a href="visualize.html">regular visualizer</a> for the full set of features.
 
   <span id="surveyPane"></span>
 
@@ -37,12 +39,7 @@
 
   </div>
 
-<table id="experimentalHeader">
-<tr>
-<td valign="top" id="headerTdLeft"></td>
-<td valign="top" id="headerTdRight"></td>
-</tr>
-</table>
+<div id="ptutorMasthead"><a href="visualize.html">P-Tutor</a><span class="ptutorAt"> @ </span><span class="ptutorCampus">UC Davis</span></div>
 
   <table>
     <tr>

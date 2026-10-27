@@ -36,6 +36,12 @@ def python_version():
     response.content_type = 'text/plain'
     return '.'.join(platform.python_version_tuple()[:2])  # e.g. '3.12'
 
+# P-Tutor: the bare hostname lands on the visualizer (index.html is a
+# symlink to visualize.html for static hosts; this covers "/")
+@route('/')
+def root():
+    return static_file('visualize.html', root='.')
+
 @route('/<filepath:path>')
 def index(filepath):
     return static_file(filepath, root='.')

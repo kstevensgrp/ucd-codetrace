@@ -1,0 +1,30 @@
+/* P-Tutor at UC Davis — branding styles.
+   Linked directly from the HTML pages (not bundled by webpack), so edits
+   here show on reload without a rebuild.
+   Campus blue #022851, campus gold #FFBF00. */
+
+#ptutorMasthead {
+  max-width: 700px;
+  margin: 18px auto 6px auto;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #FFBF00;
+  font-family: georgia, serif;
+  font-size: 22pt;
+  line-height: 1.1em;
+  color: #022851;
+}
+#ptutorMasthead a,
+#ptutorMasthead a:visited,
+#ptutorMasthead a:hover {
+  color: #022851;
+  font-weight: bold;
+  text-decoration: none;
+}
+#ptutorMasthead .ptutorAt {
+  color: #FFBF00;
+  font-weight: bold;
+}
+#ptutorMasthead .ptutorCampus {
+  font-size: 16pt;
+  letter-spacing: 0.5px;
+}

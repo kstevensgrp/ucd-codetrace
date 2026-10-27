@@ -475,7 +475,7 @@ export class ExecutionVisualizer {
 
       // add an extra label to link back to the main site, so that viewers
       // on the embedded page know that they're seeing an OPT visualization
-      base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #3D58A2;">P-Tutor</a></div>');
+      base.find('#creditsPane').html('<div style="font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">Rendered by <a href="/" target="_blank" style="color: #022851;">P-Tutor</a></div>');
       base.find('#codeFooterDocs').hide(); // cut out extraneous docs
     } else {
     }

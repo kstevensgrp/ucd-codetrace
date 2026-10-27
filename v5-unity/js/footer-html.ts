@@ -14,7 +14,6 @@ K. A. Stevens, UC Davis.</p>`;
 
 
 export var footerHtml = `
-<p style="margin-top: 20px; margin-bottom: 30px;"><a href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/unsupported-features.md" target="_blank">unsupported features</a></p>
 
 <p>
   <button id="genUrlBtn" class="smallBtn" type="button">Generate permanent link</button> <input type="text" id="urlOutput" size="60"/>
@@ -31,8 +30,7 @@ with the standard library modules students use most:
 <tt>__future__</tt>, abc, array, bisect, calendar, cmath, collections, copy,
 datetime, decimal, doctest, fractions, functools, hashlib, heapq, io,
 itertools, json, locale, math, operator, pickle, pprint, random, re, string,
-time, types, typing, unittest. Other imports and file access aren't available
-(see <a href="https://github.com/kstevensgrp/ucd-ptutor/blob/main/unsupported-features.md" target="_blank">unsupported features</a>).</p>
+time, types, typing, unittest. Other imports and file access aren't available.</p>
 
 ` + privacyAndEndingHTML;
 

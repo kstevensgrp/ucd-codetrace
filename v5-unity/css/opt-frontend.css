@@ -30,7 +30,7 @@ body {
 a,
 a:visited,
 a:hover {
-  color: #3D58A2;
+  color: #022851;
 }
 
 span {
@@ -166,8 +166,7 @@ button.surveyBtnBig {
  margin-left: 0px;
 }
 
-#experimentalHeader {
-}
+/* P-Tutor branding lives in css/ptutor.css (linked from the HTML, not bundled). */
 
 #surveyHeader {
   margin-left: 100px;
