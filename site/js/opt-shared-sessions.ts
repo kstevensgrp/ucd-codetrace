@@ -8,8 +8,7 @@
 // The TogetherJS library is no longer loaded and OptFrontendSharedSessions
 // exits its constructor early (see disableSharedSessions below), so none of
 // the help-queue polling, chat UI, or hub traffic in this file runs. The
-// class is kept because visualize.ts, recorder.ts, csc108h.ts and
-// composingprograms.ts subclass it.
+// class is kept because visualize.ts and recorder.ts subclass it.
 var togetherjsInUrl = false;
 
 require('script-loader!./lib/moment.min.js'); // https://momentjs.com/

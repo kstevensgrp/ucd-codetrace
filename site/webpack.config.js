@@ -57,8 +57,6 @@ module.exports = {
         'render-trace': "./js/render-trace.ts",
         'opt-live': "./js/opt-live.ts",
         'iframe-embed': "./js/iframe-embed.ts",
-        'composingprograms': "./js/composingprograms.ts",
-        'csc108h': "./js/csc108h.ts",
         'pytutor-embed': "./js/pytutor-embed.ts",
     },
 
