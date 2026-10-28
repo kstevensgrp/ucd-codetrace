@@ -22,3 +22,8 @@
   align-self: center;
 }
 #ctMasthead .ctCampus { height: 22px; display: block; }
+
+/* CodeTrace: data-file line under the editor (#data=<set>) */
+#dataFilesPane { font-family: verdana, arial, helvetica, sans-serif; font-size: 10pt; color: #333; margin: 6px 0 2px 0; }
+#dataFilesPane a { color: #022851; }
+#dataFilesPane code { font-size: 10pt; }

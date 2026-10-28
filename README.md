@@ -25,6 +25,14 @@ conda env update -f environment.yml --prune
 
 Without conda, any Python 3.12 works: `python3 -m venv .venv && source .venv/bin/activate && pip install -r site/requirements.txt`.
 
+## Course data files
+
+Student code can read instructor-provided files when the page is opened with
+a data set in the URL, e.g. `visualize.html#data=ecs32a`. The files live in
+`data/<set>/` (see `data/README.md`); the page lists them under the editor
+and `open('song.txt')` reads them read-only. Without `#data=`, `open()` is
+unsupported as in Python Tutor.
+
 ## Running locally
 
 ```sh

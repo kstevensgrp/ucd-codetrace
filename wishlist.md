@@ -4,11 +4,19 @@ Ideas for CodeTrace at UC Davis, roughly in priority order. Each entry is a
 sketch of how it would be built, so it can be picked up later without
 re-deriving the design.
 
-## 1. Course data files for assignments
+## 1. Course data files for assignments — DONE (2026-10-27)
 
-Let student programs read instructor-provided files (CSV, text) so
-assignment code can be visualized as written, instead of being rewritten
-around `io.StringIO`.
+Implemented as sketched below: `data_dir` in `pg_logger.py` with a
+restricted `open()`, `data/<set>/` under `CODETRACE_DATA_ROOT` in
+`bottle_server.py` with listing and file routes, `#data=<set>` in the
+frontend with the file line under the editor. First set: `data/ecs32a/`.
+Decided: one set per course for now (`data=ecs32a`); per-assignment sets
+are just more directories. Still open: raising the 1,000-line cap for
+data runs.
+
+Original sketch: let student programs read instructor-provided files (CSV,
+text) so assignment code can be visualized as written, instead of being
+rewritten around `io.StringIO`.
 
 ### Tracer: a restricted `open`, not `allow_all_modules`
 

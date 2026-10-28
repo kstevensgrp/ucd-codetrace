@@ -31,6 +31,7 @@
 # NB: try to import the minimal amount of stuff in this module to lessen
 # the security attack surface
 
+import os
 import sys
 import bdb # the KEY import here!
 import re
@@ -127,7 +128,7 @@ for e in ('_*', '__*', '__*__', '*_$'):
 '''
 
 
-TRY_ANACONDA_STR = '\n\nYou can also try "Python 3.6 with Anaconda (experimental)",\nwhich is slower but lets you import many more modules.\n'
+TRY_ANACONDA_STR = '' # CodeTrace: the Anaconda backend is gone; upstream appended a pointer to it here
 
 
 # simple sandboxing scheme:
@@ -181,6 +182,8 @@ ALLOWED_STDLIB_MODULE_IMPORTS = ('math', 'random', 'time', 'datetime',
                           'types', 'array',
                           'locale', 'abc',
                           'doctest', 'unittest',
+                          # CodeTrace: for course data files
+                          'csv', 'statistics',
                           )
 
 # allow users to import but don't explicitly import it since it's
@@ -249,15 +252,48 @@ random.seed(0)
 input_string_queue = []
 
 
-def open_wrapper(*args):
+def open_wrapper(*args, **kwargs):
   if is_python3:
-      raise Exception('''open() is not supported by Python Tutor.
-Instead use io.StringIO() to simulate a file.
-Example: http://goo.gl/uNvBGl''' + TRY_ANACONDA_STR)
+      raise Exception('''open() is not supported here: no data set is selected.
+Course data files can be read when CodeTrace is opened with a #data= link
+from your assignment. Otherwise use io.StringIO() to simulate a file.''')
   else:
       raise Exception('''open() is not supported by Python Tutor.
 Instead use StringIO.StringIO() to simulate a file.
-Example: http://goo.gl/Q9xQ4p''' + TRY_ANACONDA_STR)
+Example: http://goo.gl/Q9xQ4p''')
+
+
+# CodeTrace: course data files. When the server selects a data set, student
+# code gets this restricted open() instead of open_wrapper: it accepts a bare
+# file name (no directories), looks it up inside data_dir, and opens it
+# read-only. Everything else about open() is unchanged.
+DATA_OPEN_MODES = ('r', 'rt', 'tr', 'rb', 'br')
+
+def make_data_open(data_dir):
+  real_open = open
+  data_dir = os.path.realpath(data_dir)
+  try:
+    available = sorted(n for n in os.listdir(data_dir)
+                       if os.path.isfile(os.path.join(data_dir, n)))
+  except OSError:
+    available = []
+
+  def data_open(file, mode='r', *args, **kwargs):
+    if not isinstance(file, str):
+      raise TypeError('open() takes the name of a course data file as a string')
+    if mode not in DATA_OPEN_MODES:
+      raise PermissionError('CodeTrace data files are read-only: open(%r, %r) is not allowed'
+                            % (file, mode))
+    if file != os.path.basename(file) or file in ('', '.', '..') or file.startswith('.'):
+      raise FileNotFoundError('open() takes just a file name, not a path: %r' % file)
+    path = os.path.realpath(os.path.join(data_dir, file))
+    if os.path.dirname(path) != data_dir or not os.path.isfile(path):
+      raise FileNotFoundError('No data file named %r. Available: %s'
+                              % (file, ', '.join(available) if available else '(none)'))
+    if 'b' not in mode:
+      kwargs.setdefault('encoding', 'utf-8')
+    return real_open(path, mode, *args, **kwargs)
+  return data_open
 
 # create a more sensible error message for unsupported features
 def create_banned_builtins_wrapper(fn_name):
@@ -313,7 +349,8 @@ BANNED_BUILTINS = [] # 2018-06-15 don't ban any builtins since that's just secur
 #                   'dir', 'globals', 'locals', 'vars']
 # Peter says 'apply' isn't dangerous, so don't ban it
 
-IGNORE_VARS = set(('__builtins__', '__name__', '__exception__', '__doc__', '__package__'))
+IGNORE_VARS = set(('__builtins__', '__name__', '__exception__', '__doc__', '__package__',
+                   '__warningregistry__')) # CodeTrace: an unclosed data file leaves this in the globals
 
 
 '''
@@ -498,8 +535,12 @@ class PGLogger(bdb.Bdb):
     # for each module rather than all stdout going to a single stream
     def __init__(self, cumulative_mode, heap_primitives, show_only_outputs, finalizer_func,
                  disable_security_checks=False, allow_all_modules=False, crazy_mode=False,
-                 custom_modules=None, separate_stdout_by_module=False, probe_exprs=None):
+                 custom_modules=None, separate_stdout_by_module=False, probe_exprs=None,
+                 data_dir=None):
         bdb.Bdb.__init__(self)
+        # CodeTrace: directory of course data files that student code may
+        # open() read-only, or None for upstream's no-files behavior
+        self.data_dir = data_dir
         self.mainpyfile = ''
         self._wait_for_mainpyfile = 0
 
@@ -1401,7 +1442,7 @@ class PGLogger(bdb.Bdb):
 
         for (k, v) in builtin_items:
           if k == 'open' and not self.allow_all_modules: # put this before BANNED_BUILTINS
-            user_builtins[k] = open_wrapper
+            user_builtins[k] = make_data_open(self.data_dir) if self.data_dir else open_wrapper
           elif k in BANNED_BUILTINS:
             user_builtins[k] = create_banned_builtins_wrapper(k)
           elif k == '__import__' and not self.allow_all_modules:
@@ -1508,7 +1549,12 @@ class PGLogger(bdb.Bdb):
             resource.setrlimit(resource.RLIMIT_CPU, (5, 5))
 
             # protect against unauthorized filesystem accesses ...
-            resource.setrlimit(resource.RLIMIT_NOFILE, (0, 0)) # no opened files allowed
+            if self.data_dir:
+              # CodeTrace: leave room for a few data-file handles (fd numbers
+              # below the limit); data_open still restricts what they can be
+              resource.setrlimit(resource.RLIMIT_NOFILE, (32, 32))
+            else:
+              resource.setrlimit(resource.RLIMIT_NOFILE, (0, 0)) # no opened files allowed
 
             # VERY WEIRD. If you activate this resource limitation, it
             # ends up generating an EMPTY trace for the following program:
@@ -1639,7 +1685,7 @@ class PGLogger(bdb.Bdb):
 import json
 
 # the MAIN meaty function!!!
-def exec_script_str(script_str, raw_input_lst_json, options_json, finalizer_func):
+def exec_script_str(script_str, raw_input_lst_json, options_json, finalizer_func, data_dir=None):
   if options_json:
     options = json.loads(options_json)
   else:
@@ -1650,7 +1696,7 @@ def exec_script_str(script_str, raw_input_lst_json, options_json, finalizer_func
   py_crazy_mode = ('py_crazy_mode' in options and options['py_crazy_mode'])
 
   logger = PGLogger(options['cumulative_mode'], options['heap_primitives'], options['show_only_outputs'], finalizer_func,
-                    crazy_mode=py_crazy_mode)
+                    crazy_mode=py_crazy_mode, data_dir=data_dir)
 
   # TODO: refactor these NOT to be globals
   global input_string_queue
@@ -1674,11 +1720,12 @@ def exec_script_str(script_str, raw_input_lst_json, options_json, finalizer_func
 # [optional] probe_exprs is a list of strings representing
 # expressions whose values to probe at each step (advanced)
 def exec_script_str_local(script_str, raw_input_lst_json, cumulative_mode, heap_primitives, finalizer_func,
-                          probe_exprs=None, allow_all_modules=False):
+                          probe_exprs=None, allow_all_modules=False, data_dir=None):
   logger = PGLogger(cumulative_mode, heap_primitives, False, finalizer_func,
                     disable_security_checks=True,
                     allow_all_modules=allow_all_modules,
-                    probe_exprs=probe_exprs)
+                    probe_exprs=probe_exprs,
+                    data_dir=data_dir)
 
   # TODO: refactor these NOT to be globals
   global input_string_queue

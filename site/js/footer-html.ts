@@ -26,11 +26,12 @@ export var footerHtml = `
 </div>
 
 <p style="margin-top: 25px;"><b>What it runs:</b> Python 3 (currently 3.12),
-with the standard library modules students use most:
-<tt>__future__</tt>, abc, array, bisect, calendar, cmath, collections, copy,
-datetime, decimal, doctest, fractions, functools, hashlib, heapq, io,
-itertools, json, locale, math, operator, pickle, pprint, random, re, string,
-time, types, typing, unittest. Other imports and file access aren't available.</p>
+with the standard library modules students use most: __future__, abc, array, bisect,
+calendar, cmath, collections, copy, csv, datetime, decimal, doctest, fractions, functools,
+hashlib, heapq, io, itertools, json, locale, math, operator, pickle, pprint, random, re,
+statistics, string, time, types, typing, unittest. Other imports aren't available, and
+<code>open()</code> reads only the course data files listed under the editor when a
+page is opened with a <code>#data=</code> link.</p>
 
 ` + privacyAndEndingHTML;
 

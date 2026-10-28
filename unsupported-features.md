@@ -14,8 +14,10 @@ real workloads.
   math, operator, pickle, pprint, random, re, string, time, types, typing,
   unittest. Anything else (including NumPy, pandas, requests) raises
   `ImportError`.
-- **No file access**: `open()` raises an error. Use `io.StringIO` to
-  simulate a file in memory.
+- **No file access, except course data files**: `open()` raises an error
+  unless the page was opened with a data set (`#data=<set>` in the URL),
+  in which case the files in that set can be read with `open('name.txt')`
+  but not written. Use `io.StringIO` to simulate any other file in memory.
 - **No networking, threads, subprocesses, or `sys.exit()`**-style tricks.
 - **Execution is capped** at 1,000 executed lines, a few seconds of CPU
   time, and about 200 MB of memory. An infinite loop simply stops at the

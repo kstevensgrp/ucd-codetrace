@@ -528,7 +528,8 @@ export class OptFrontend extends AbstractBaseFrontend {
                py: $('#pythonVersionSelector').val(),
                /* ALWAYS JSON serialize rawInputLst, even if it's empty! */
                rawInputLstJSON: JSON.stringify(this.rawInputLst),
-               curInstr: this.myVisualizer ? this.myVisualizer.curInstr : undefined};
+               curInstr: this.myVisualizer ? this.myVisualizer.curInstr : undefined,
+               data: this.dataSet}; // CodeTrace: rides along in permalinks
 
     // keep this really clean by avoiding undefined values
     if (ret.cumulative === undefined)
@@ -543,6 +544,8 @@ export class OptFrontend extends AbstractBaseFrontend {
       delete ret.rawInputLstJSON;
     if (ret.curInstr === undefined)
       delete ret.curInstr;
+    if (ret.data === undefined)
+      delete ret.data;
 
     // frontends can optionally AUGMENT the app state with custom fields
     this.appStateAugmenter(ret);
@@ -586,6 +589,8 @@ export class OptFrontend extends AbstractBaseFrontend {
     }
 
     this.rawInputLst = queryStrOptions.rawInputLst ? queryStrOptions.rawInputLst : [];
+    this.dataSet = queryStrOptions.dataSet ? String(queryStrOptions.dataSet) : undefined; // CodeTrace
+    this.showDataFiles();
     this.preseededCurInstr = queryStrOptions.preseededCurInstr;
     if (isNaN(this.preseededCurInstr)) {
       this.preseededCurInstr = undefined;

@@ -47,6 +47,11 @@ export abstract class AbstractBaseFrontend {
   // inputted by user for raw_input / mouse_input events
   rawInputLst: string[] = [];
 
+  // CodeTrace: course data set selected by #data=<set> in the URL. Sent to
+  // the backend as the "data" option so student code can open() its files;
+  // undefined means upstream behavior (open() is not supported).
+  dataSet: string = undefined;
+
   isExecutingCode: boolean = false;
 
   // CodeTrace: upstream kept a diff_match_patch log of every edit here
@@ -188,6 +193,7 @@ export abstract class AbstractBaseFrontend {
             rawInputLst: ril ? $.parseJSON(ril) : undefined,
             demoMode: $.bbq.getState('demo'), // is 'demo mode' on? if so, hide a lot of excess stuff
             codcastFile: $.bbq.getState('codcast'), // load a codcast file created using ../recorder.html
+            dataSet: $.bbq.getState('data'), // CodeTrace: course data set
             codeopticonSession: $.bbq.getState('cosession'),
             codeopticonUsername: $.bbq.getState('couser'),
             testCasesLst: testCasesLstJSON ? $.parseJSON(testCasesLstJSON) : undefined
@@ -207,7 +213,36 @@ export abstract class AbstractBaseFrontend {
                heap_primitives: ($('#heapPrimitivesSelector').val() == 'true'),
                show_only_outputs: false, // necessary for legacy reasons, ergh!
                origin: this.originFrontendJsFile};
+    if (this.dataSet) {
+      (ret as any).data = this.dataSet; // CodeTrace
+    }
     return ret;
+  }
+
+  // CodeTrace: show which data files the selected set offers, each linked
+  // to the plain-text file, in #dataFilesPane under the code editor.
+  showDataFiles() {
+    var pane = $('#dataFilesPane');
+    if (!this.dataSet) {
+      pane.hide();
+      return;
+    }
+    var setName = this.dataSet;
+    var esc = (s) => $('<div/>').text(s).html();
+    pane.show().html('Data files for ' + esc(setName) + ': loading ...');
+    $.getJSON('data/' + encodeURIComponent(setName) + '/', (res) => {
+      if (!res.files || res.files.length == 0) {
+        pane.html('Data files for ' + esc(setName) + ': none');
+        return;
+      }
+      var links = res.files.map((f) =>
+        '<a target="_blank" href="data/' + encodeURIComponent(setName) + '/' +
+        encodeURIComponent(f.name) + '">' + esc(f.name) + '</a>');
+      pane.html('Data files for ' + esc(setName) + ', open with <code>open(\'' +
+                esc(res.files[0].name) + '\')</code>: ' + links.join(' &middot; '));
+    }).fail(() => {
+      pane.html('No data set named ' + esc(setName) + ' on this server.');
+    });
   }
 
   getBaseFrontendOptionsObj() {
@@ -377,6 +412,7 @@ export abstract class AbstractBaseFrontend {
     // in different frontend files ...
     //assert(s1.origin == s2.origin); // sanity check!
     return (s1.code == s2.code &&
+            s1.data == s2.data && // CodeTrace
             s1.cumulative == s2.cumulative &&
             s1.heapPrimitives == s1.heapPrimitives &&
             s1.textReferences == s2.textReferences &&
