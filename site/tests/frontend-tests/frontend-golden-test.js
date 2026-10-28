@@ -3,7 +3,7 @@
 // dependencies: puppeteer, pixelmatch, fs-extra (see ../../package.json)
 //
 // requires BASE_URL to work in a web browser, so you should start the webserver
-// with 'npm start' from the v5-unity/ subdirectory *before* running tests
+// with 'npm start' from the site/ subdirectory *before* running tests
 
 // exports a runFrontendTest function
 
@@ -16,7 +16,7 @@ const path = require('path');
 const assert = require('assert');
 const crypto = require('crypto');
 
-const TEST_BASEDIR = 'tests/frontend-tests/' // relative to v5-unity/
+const TEST_BASEDIR = 'tests/frontend-tests/' // relative to site/
 const BASE_URL = 'http://localhost:8003/render-trace.html#';
 
 const RED = '\033[91m';

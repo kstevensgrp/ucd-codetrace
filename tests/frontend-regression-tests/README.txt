@@ -1,4 +1,4 @@
-[ DEPRECATED as of 2018-06-09 ... instead see ../../v5-unity/tests/frontend-tests/ ]
+[ DEPRECATED as of 2018-06-09 ... instead see ../../site/tests/frontend-tests/ ]
 
 ---
 We will use phantomcss.js for visual regression testing of the OPT

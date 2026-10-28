@@ -6,14 +6,12 @@ CodeTrace at UC Davis — a fork of the final open-source release (2020) of Pyth
 
 ## Layout
 
-- `v5-unity/` — the code this project runs: TypeScript/webpack frontend (prebuilt bundles in `build/`), Python tracer (`pg_logger.py`, `pg_encoder.py`), and `bottle_server.py` for local development.
-- `v3/`, `v1-v2/` — earlier generations, kept for history.
-- `v4-cokapi/` — upstream's Node service for the Java/C/C++/JavaScript/Ruby backends (not used here yet).
+- `site/` — the code this project runs: TypeScript/webpack frontend (prebuilt bundles in `build/`), Python tracer (`pg_logger.py`, `pg_encoder.py`), and `bottle_server.py` for local development.
 
 ## Quick start (Python visualizer only)
 
 ```sh
-cd v5-unity
+cd site
 pip install bottle
 python3 bottle_server.py        # then open http://localhost:8003/visualize.html
 ```

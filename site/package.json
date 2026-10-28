@@ -1,7 +1,7 @@
 {
   "name": "ucd-codetrace",
   "version": "1.0.0",
-  "description": "CodeTrace at UC Davis (fork of Python Tutor v5-unity)",
+  "description": "CodeTrace at UC Davis (fork of Python Tutor v5-unity, now site/)",
   "private": true,
   "repository": "https://github.com/kstevensgrp/ucd-codetrace",
   "license": "MIT",
