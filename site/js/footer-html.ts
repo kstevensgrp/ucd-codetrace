@@ -10,7 +10,7 @@ course's academic integrity policy. Enjoy exploring how your code runs!</p>
 created by <a href="http://www.pgbovine.net/">Philip Guo</a>, used under the
 <a href="https://github.com/kstevensgrp/ucd-codetrace/blob/main/LICENSE.txt">MIT License</a>.
 Thank you, Philip. Original code &copy; Philip Guo; updates &copy; 2026
-K. A. Stevens, UC Davis.</p>`;
+The Regents of the University of California.</p>`;
 
 
 export var footerHtml = `

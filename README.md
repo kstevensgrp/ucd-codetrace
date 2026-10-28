@@ -46,4 +46,4 @@ The server reloads itself when Python files change; HTML and CSS changes show on
 `bottle_server.py` is a development server with no sandboxing; do not expose it directly.
 
 ## Attribution
-Original work Copyright (C) Philip Guo, released under the MIT License (see `LICENSE.txt`). The upstream repository, `pgbovine/OnlinePythonTutor`, was removed from GitHub in 2020; this history was recovered from the `loongyowl/OnlinePythonTutor` fork. Python Tutor is Philip Guo's project and name; CodeTrace is an independent fork and is not affiliated with or endorsed by it.
+Original work Copyright (C) Philip Guo, released under the MIT License (see `LICENSE.txt`). Changes Copyright (c) 2026 The Regents of the University of California, under the same license. The upstream repository, `pgbovine/OnlinePythonTutor`, was removed from GitHub in 2020; this history was recovered from the `loongyowl/OnlinePythonTutor` fork. Python Tutor is Philip Guo's project and name; CodeTrace is an independent fork and is not affiliated with or endorsed by it.
