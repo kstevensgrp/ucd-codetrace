@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var exec = require('child_process').exec;
 
 module.exports = {
     plugins: [
@@ -12,22 +11,6 @@ module.exports = {
         jQuery: "jquery",
         $: "jquery"
       }),
-
-      // run a micro frontend regression test after every webpack build
-      // to sanity-check
-      //
-      // TODO: get frontend regression tests working again before re-enabling them:
-      /*
-      new WebpackOnBuildPlugin(function(stats) {
-        console.log("\n");
-        exec("cd ../tests/frontend-regression-tests/ && make micro", (error, stdout, stderr) => {
-          console.log(stdout);
-          if (stderr) {
-            console.log(`Test stderr: ${stderr}`);
-          }
-        });
-      }),
-      */
     ],
 
     // some included libraries reference 'jquery', so point to it:
@@ -53,11 +36,8 @@ module.exports = {
 
     entry: {
         'visualize': "./js/visualize.ts",
-        'recorder': "./js/recorder.ts",
-        'render-trace': "./js/render-trace.ts",
         'opt-live': "./js/opt-live.ts",
         'iframe-embed': "./js/iframe-embed.ts",
-        'pytutor-embed': "./js/pytutor-embed.ts",
     },
 
     output: {
