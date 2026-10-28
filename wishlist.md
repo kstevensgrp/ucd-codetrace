@@ -23,12 +23,6 @@ Instead, add a `data_dir` option; when it is set:
   "CodeTrace data files are read-only";
 - `RLIMIT_NOFILE`, which upstream sets to 0 right before the student's
   code runs, becomes a small number (e.g. 8) so file handles exist at all;
-- `csv` joins the import whitelist (pure Python, and what students will
-  actually use). Everything else in the sandbox stays as is.
-
-About 30 lines, all in one file. `open()` returns a normal `TextIOWrapper`,
-which the visualizer already renders as an object, so students see
-themselves iterating over the file.
 
 ### Server: where files live and how a run picks them
 

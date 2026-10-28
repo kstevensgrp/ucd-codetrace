@@ -9,7 +9,6 @@ CodeTrace at UC Davis — a fork of the final open-source release (2020) of Pyth
 - `site/` — the code this project runs: TypeScript/webpack frontend (prebuilt bundles in `build/`), Python tracer (`pg_logger.py`, `pg_encoder.py`), and `bottle_server.py` for local development.
 
 ## Quick start (Python visualizer only)
-
 ```sh
 cd site
 pip install bottle
@@ -19,5 +18,4 @@ python3 bottle_server.py        # then open http://localhost:8003/visualize.html
 `bottle_server.py` is a development server with no sandboxing; do not expose it directly.
 
 ## Attribution
-
 Original work Copyright (C) Philip Guo, released under the MIT License (see `LICENSE.txt`). The upstream repository, `pgbovine/OnlinePythonTutor`, was removed from GitHub in 2020; this history was recovered from the `loongyowl/OnlinePythonTutor` fork. Python Tutor is Philip Guo's project and name; CodeTrace is an independent fork and is not affiliated with or endorsed by it.
