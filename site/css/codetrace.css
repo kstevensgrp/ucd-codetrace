@@ -4,8 +4,8 @@
    Aggie Blue #022851, Aggie Gold #FFBF00. */
 
 #ctMasthead {
-  max-width: 700px;
-  margin: 18px auto 6px auto;
+  /* full window width, with the same side gutters at any size */
+  margin: 18px 24px 6px 24px;
   padding-bottom: 8px;
   border-bottom: 2px solid #022851;
   display: flex;
