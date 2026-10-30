@@ -8,7 +8,7 @@
    program name swaps in without moving the rule or the page below it. */
 :root {
   /* --campus-mark: url(../img/ucdavis-wordmark-blue.svg); --campus-mark-height: 22px; */
-  --campus-mark: url(../img/ucdavis-cs-wordmark.svg); --campus-mark-height: 22px;
+  --campus-mark: url(../img/ucdavis-cs-wordmark.svg); --campus-mark-height: 26px;
 }
 
 #ctMasthead {
@@ -21,7 +21,10 @@
   justify-content: space-between;
 }
 #ctMasthead a { line-height: 0; }
-#ctMasthead .ctWordmark { height: 30px; display: block; }
+/* CodeTrace logo, 30px tall. Its chevron hangs 5.6% of the logo's height below
+   the letters' baseline, so nudge the image down by that much: the letters then
+   sit on the same line as the campus mark, and the layout and rule don't move. */
+#ctMasthead .ctWordmark { height: 30px; display: block; position: relative; top: calc(30px * 0.0559); }
 #ctMasthead .ctLive {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size: 13pt;

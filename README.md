@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/img/codetrace-logo-reversed.svg">
+  <img src="site/img/codetrace-logo.svg" alt="CodeTrace" height="56">
+</picture>
+
 # CodeTrace at UC Davis
 
 CodeTrace at UC Davis — a fork of the final open-source release (2020) of Python Tutor by Philip Guo, for stepping through code execution, with access to course data files. MIT licensed.
